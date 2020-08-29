@@ -34,7 +34,7 @@ public class Group {
     private String description;
 
     @Column(name = "SORT_ORDER")
-    private int sortOrder;
+    private long sortOrder;
 
     @Column(name = "STATUS")
     private GroupStatus status;
@@ -46,6 +46,24 @@ public class Group {
     @Column(name = "MODIFED_AT")
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
+
+    public Group(String name, String description, long sortOrder, GroupStatus status) {
+        this.name = name;
+        this.description = description;
+        this.sortOrder = sortOrder;
+        this.status = status;
+    }
+
+    public Group(String name, String description, long sortOrder, GroupStatus status, Shop shop) {
+        this.name = name;
+        this.description = description;
+        this.sortOrder = sortOrder;
+        this.status = status;
+
+        if( shop != null) {
+            setShop(shop);
+        }
+    }
 
     public void changeGroupStatus(GroupStatus status){
         this.status = status;
@@ -59,7 +77,11 @@ public class Group {
         this.description = description;
     }
 
-    public void chagneSortOrder(int sortOrder) {
+    public void chagneSortOrder(long sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public void setShop(Shop shop){
+        this.shop = shop;
     }
 }

@@ -2,6 +2,7 @@ package com.studyveloper.baedalon.repository;
 
 import com.studyveloper.baedalon.shop.Group;
 import com.studyveloper.baedalon.shop.GroupStatus;
+import com.studyveloper.baedalon.shop.Shop;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -27,9 +28,12 @@ class GroupRepositoryTest {
     public void baiscCRUD() {
         Group group = new Group();
         group.changeName("groupA");
-        group.chagneSortOrder(1);
         group.changeDescription("desc");
         group.changeGroupStatus(GroupStatus.SHOWN);
+
+        long count = groupRepository.count();
+
+        group.chagneSortOrder(count);
 
         groupRepository.save(group);
 
@@ -61,6 +65,18 @@ class GroupRepositoryTest {
         group.changeDescription("desc");
         group.changeGroupStatus(GroupStatus.SHOWN);
 
+        Shop shop = new Shop();
+        entityManager.persist(shop);
 
+        long shopId = shop.getId();
+
+        group.setShop(shop);
+
+        groupRepository.save(group);
+
+        List<Group> groups2 = groupRepository.findByShopId(shopId);
+
+        assertThat(groups2.size()).isEqualTo(1);
+        assertThat(groups2.get(0).getShop().getId()).isEqualTo(shopId);
     }
 }
