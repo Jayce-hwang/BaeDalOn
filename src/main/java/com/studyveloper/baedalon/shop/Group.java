@@ -1,9 +1,12 @@
 package com.studyveloper.baedalon.shop;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.FetchType.*;
@@ -35,4 +38,28 @@ public class Group {
 
     @Column(name = "STATUS")
     private GroupStatus status;
+
+    @Column(name = "CREATED_AT")
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "MODIFED_AT")
+    @UpdateTimestamp
+    private LocalDateTime modifiedAt;
+
+    public void changeGroupStatus(GroupStatus status){
+        this.status = status;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
+
+    public void chagneSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
 }
