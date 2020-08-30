@@ -1,46 +1,79 @@
 package com.studyveloper.baedalon.user;
 
-import lombok.*;
-
-import javax.persistence.*;
+import static javax.persistence.EnumType.STRING;
 import java.time.LocalDateTime;
-
-import static javax.persistence.EnumType.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
 
 @Entity
-@Table(name="CUSTORMERS")
+@Table(name = "CUSTORMERS")
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
-@NoArgsConstructor
 public class Customer {
 
-    @Id @GeneratedValue
-    @Column(name="ID")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "ID")
+	private Long id;
 
-    @Column(name = "EMAIL")
-    private String email;
+	@Column(name = "EMAIL")
+	private String email;
 
-    @Column(name = "PHONE")
-    private String phone;
+	@Column(name = "PHONE")
+	private String phone;
 
-    @Column(name = "NICKNAME")
-    private String nickname;
+	@Column(name = "NICKNAME")
+	private String nickname;
 
-    @Column(name = "PASSWORD")
-    private String password;
+	@Column(name = "PASSWORD")
+	private String password;
 
-    @Column(name = "STATUS")
-    @Enumerated(STRING)
-    private CustomerStatus status;
+	@Column(name = "STATUS")
+	@Enumerated(STRING)
+	private CustomerStatus status;
 
-    @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
+	@Column(name = "CREATED_AT")
+	private LocalDateTime createdAt;
 
-    @Column(name = "MODIFIED_AT")
-    private LocalDateTime modifiedAt;
+	@Column(name = "MODIFIED_AT")
+	private LocalDateTime modifiedAt;
 
-    @Column(name = "LOGIN_ID")
-    private String loginId;
+	@Column(name = "LOGIN_ID")
+	private String loginId;
+	
+	protected Customer() {
+		status = CustomerStatus.Activated;
+		createdAt = LocalDateTime.now();
+		modifiedAt = LocalDateTime.now();
+	}
+
+	@Builder
+	public Customer(String email, String phone, String nickname, String password, String loginId) {
+		this();
+		this.email = email;
+		this.phone = phone;
+		this.nickname = nickname;
+		this.password = password;
+		this.loginId = loginId;
+	}
+	
+	public void update(String phone, String nickname, String newPassword, String oldPassword) {
+		if(!this.password.equals(oldPassword)) {
+			// throw new checked exception : 비밀번호 틀림
+		}
+		
+		this.phone = phone;
+		this.nickname = nickname;
+		this.password = newPassword;
+		this.modifiedAt = LocalDateTime.now();
+	}
+	
+	public void inactivate() {
+		this.status = CustomerStatus.Inactivated;
+	}
 }

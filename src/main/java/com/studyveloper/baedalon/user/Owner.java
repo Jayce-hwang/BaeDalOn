@@ -10,9 +10,6 @@ import static javax.persistence.EnumType.*;
 @Entity
 @Table(name = "OWNERS")
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
-@NoArgsConstructor
 public class Owner {
 
     @Id @GeneratedValue
@@ -40,5 +37,33 @@ public class Owner {
 
     @Column(name = "MODIFIED_AT")
     private LocalDateTime modifiedAt;
-
+    
+    protected Owner() {
+    	status = OwnerStatus.Activated;
+    	createdAt = LocalDateTime.now();
+    	modifiedAt = LocalDateTime.now();
+    }
+    
+    @Builder
+    public Owner(String email, String name, String password) {
+    	this();
+    	this.email = email;
+    	this.password = password;
+    	this.name = name;
+    }
+    
+    public void update(String phone, String name, String newPassword, String oldPassword) {
+    	if(!this.password.equals(oldPassword)) {
+    		// throw new checked exception : 비밀번호 틀림
+    	}
+    	
+    	this.phone = phone;
+    	this.name = name;
+    	this.password = newPassword;
+    	this.modifiedAt = LocalDateTime.now();
+    }
+    
+    public void inactivate() {
+    	this.status = OwnerStatus.Inactivated;
+    }
 }
