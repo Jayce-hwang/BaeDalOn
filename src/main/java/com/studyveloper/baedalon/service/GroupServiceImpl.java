@@ -27,6 +27,9 @@ public class GroupServiceImpl implements GroupService{
         long count = groupRepository.count() + 1;
 
         Group group = new Group(name, description, count, GroupStatus.SHOWN);
+
+        //샵 레포지토리 필
+
         groupRepository.save(group);
 
         long createdGroupId = group.getId();

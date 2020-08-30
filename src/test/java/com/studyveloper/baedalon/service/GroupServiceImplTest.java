@@ -17,6 +17,8 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,5 +65,28 @@ class GroupServiceImplTest {
         long count = groupRepository.count();
 
         assertThat(count).isEqualTo(0);
+    }
+
+    @Test
+    public void findGroupsTest() {
+        GroupCreateDto groupCreateDto = new GroupCreateDto();
+        groupCreateDto.setDescription("desc");
+        groupCreateDto.setName("name");
+
+        GroupCreateDto groupCreateDto2 = new GroupCreateDto();
+        groupCreateDto2.setDescription("desc");
+        groupCreateDto2.setName("name");
+
+        Shop shop = new Shop();
+        entityManager.persist(shop);
+
+        long shopId = shop.getId();
+
+       groupService.createGroup(groupCreateDto, shopId);
+       groupService.createGroup(groupCreateDto2, shopId);
+
+        List<GroupDetails> groupDetailsList = groupService.findGroups(shopId);
+
+        assertThat(groupDetailsList.size()).isEqualTo(2);
     }
 }
