@@ -46,4 +46,17 @@ public class Shop {
 
     @Column(name = "MODIFIED_AT")
     private LocalDateTime modifiedAt;
+
+    public void open(){
+        this.status = ShopStatus.OPEN;
+    }
+    public void close(){
+        this.status = ShopStatus.CLOSE;
+    }
+    public void modify(String name, String address, String phone, String description){
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.description = description;
+    }
 }
