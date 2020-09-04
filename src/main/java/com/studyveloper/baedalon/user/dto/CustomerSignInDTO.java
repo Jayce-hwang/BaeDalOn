@@ -1,5 +1,16 @@
 package com.studyveloper.baedalon.user.dto;
 
-public class CustomerSignInDTO {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CustomerSignInDTO {
+	private String loginId;
+	private String password;
 }
+

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.studyveloper.baedalon.user.dto.CustomerDetails;
 import com.studyveloper.baedalon.user.dto.CustomerEditDTO;
+import com.studyveloper.baedalon.user.dto.CustomerSignInDTO;
 import com.studyveloper.baedalon.user.dto.CustomerSignUpDTO;
 import com.studyveloper.baedalon.user.dto.OwnerDetails;
 import com.studyveloper.baedalon.user.dto.OwnerEditDTO;
@@ -86,11 +87,20 @@ public class UserService {
 		return owner.getId();
 	}
 
-//    로그인 관련 미구현	
-//	  public Customer signIn(CustomerSignInDTO customerSignInDTO) {
-//	  
-//	  }
-//	  
+	/*
+	 * 고객 로그인
+	 */
+	public Customer signIn(CustomerSignInDTO customerSignInDTO) {
+		Customer customer = customerRepository.findByLoginIdAndStatus(customerSignInDTO.getLoginId(), CustomerStatus.Activated).orElseThrow(EntityNotFoundException::new);
+		
+		//Todo : spring-security로 전환 - 고객과 업주를 어떻게 나누지?
+		if(customer.getPassword().equals(customerSignInDTO.getPassword())) {
+			return customer;
+		}
+
+		return null;
+	}
+	  
 //	  public Owner signIn(OwnerSignInDTO ownerSignInDTO) {
 //	  
 //	  }
