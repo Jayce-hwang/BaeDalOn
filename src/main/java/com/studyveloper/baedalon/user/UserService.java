@@ -1,5 +1,7 @@
 package com.studyveloper.baedalon.user;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,24 @@ public class UserService {
 	 * 고객 회원가입
 	 */
 	public Long signUp(@NonNull CustomerSignUpDTO customerSignUpDTO) {
+		List<Customer> searchResult = customerRepository.findByLoginIdOrPhoneAndStatus(customerSignUpDTO.getLoginId(), customerSignUpDTO.getPhone(), CustomerStatus.Activated);
+		
+		searchResult.stream()
+						.filter(x -> x.getPhone().equals(customerSignUpDTO.getPhone()))
+						.findAny()
+						.ifPresent(x -> {
+							throw new RuntimeException("이미 가입된 전화번호다.");
+						});
+		
+		searchResult.stream()
+						.filter(x -> x.getLoginId().equals(customerSignUpDTO.getLoginId()))
+						.findAny()
+						.ifPresent(x -> {
+							throw new RuntimeException("이미 있는 아이디다.");
+						});
+		
+		//Todo : 인코딩은 security 구현할 때 추가 예정
+		
 		Customer customer = Customer.builder()
 				.loginId(customerSignUpDTO.getLoginId())
 				.password(customerSignUpDTO.getPassword())
