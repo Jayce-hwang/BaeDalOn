@@ -12,6 +12,7 @@ import com.studyveloper.baedalon.user.dto.CustomerSignInDTO;
 import com.studyveloper.baedalon.user.dto.CustomerSignUpDTO;
 import com.studyveloper.baedalon.user.dto.OwnerDetails;
 import com.studyveloper.baedalon.user.dto.OwnerEditDTO;
+import com.studyveloper.baedalon.user.dto.OwnerSignInDTO;
 import com.studyveloper.baedalon.user.dto.OwnerSignUpDTO;
 
 import lombok.NonNull;
@@ -101,10 +102,19 @@ public class UserService {
 		return null;
 	}
 	  
-//	  public Owner signIn(OwnerSignInDTO ownerSignInDTO) {
-//	  
-//	  }
-//	  
+	/*
+	 * 업주 로그인
+	 */
+	public Owner signIn(OwnerSignInDTO ownerSignInDTO) {
+		Owner owner = ownerRepository.findByEmailAndStatus(ownerSignInDTO.getEmail(), OwnerStatus.Activated).orElseThrow(EntityNotFoundException::new);
+		
+		if(owner.getPassword().equals(ownerSignInDTO.getPassword())) {
+			return owner;
+		}
+
+		return null;	  
+	}
+	  
 //	  public Customer signOut(CustomerSignOutDTO customerSignOutDTO) {
 //	  
 //	  }
