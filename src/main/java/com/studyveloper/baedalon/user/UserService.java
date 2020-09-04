@@ -60,8 +60,25 @@ public class UserService {
 	 * 업주 회원가입
 	 */
 	public Long signUp(@NonNull OwnerSignUpDTO ownerSignUpDTO) {
+		List<Owner> searchResult = ownerRepository.findByEmailOrPhoneAndStatus(ownerSignUpDTO.getEmail(), ownerSignUpDTO.getPhone(), OwnerStatus.Activated);
+		
+		searchResult.stream()
+						.filter(x -> x.getPhone().equals(ownerSignUpDTO.getPhone()))
+						.findAny()
+						.ifPresent(x -> {
+							throw new RuntimeException("이미 가입된 전화번호다.");
+						});
+		
+		searchResult.stream()
+						.filter(x -> x.getEmail().equals(ownerSignUpDTO.getEmail()))
+						.findAny()
+						.ifPresent(x -> {
+							throw new RuntimeException("이미 가입된 이메일이다.");
+						});
+		
 		Owner owner = Owner.builder()
 				.email(ownerSignUpDTO.getEmail())
+				.phone(ownerSignUpDTO.getPhone())
 				.password(ownerSignUpDTO.getPassword())
 				.name(ownerSignUpDTO.getName())
 				.build();

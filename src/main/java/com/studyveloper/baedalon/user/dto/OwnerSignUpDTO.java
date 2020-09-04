@@ -13,6 +13,5 @@ public class OwnerSignUpDTO {
 	private String email;
 	private String phone;
 	private String name;
-	private String loginId;
 	private String password;
 }

@@ -45,11 +45,12 @@ public class Owner {
     }
     
     @Builder
-    public Owner(String email, String name, String password) {
+    public Owner(String email, String phone, String name, String password) {
     	this();
     	this.email = email;
-    	this.password = password;
+    	this.phone = phone;
     	this.name = name;
+    	this.password = password;
     }
     
     public void update(String phone, String name, String newPassword, String oldPassword) {
