@@ -1,15 +1,15 @@
-package com.studyveloper.baedalon.service;
+package com.studyveloper.baedalon.shop;
 
-import com.studyveloper.baedalon.dto.ShopCreateDTO;
-import com.studyveloper.baedalon.dto.ShopDetails;
-import com.studyveloper.baedalon.dto.ShopEditDTO;
+import com.studyveloper.baedalon.shop.dto.ShopCreateDTO;
+import com.studyveloper.baedalon.shop.dto.ShopDetails;
+import com.studyveloper.baedalon.shop.dto.ShopEditDTO;
 import com.studyveloper.baedalon.util.Pageable;
 import com.studyveloper.baedalon.util.SearchCondition;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface ShopService {
     public Long createShop(ShopCreateDTO shopCreateDTO, Long ownerId);
     public void openShop(Long ownerId, Long shopId);

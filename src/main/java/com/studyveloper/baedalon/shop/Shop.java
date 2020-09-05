@@ -2,6 +2,8 @@ package com.studyveloper.baedalon.shop;
 
 import com.studyveloper.baedalon.user.Owner;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 
@@ -11,10 +13,10 @@ import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "SHOPS")
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder(access = AccessLevel.PUBLIC)
 public class Shop {
 
     @Id @GeneratedValue
@@ -42,9 +44,11 @@ public class Shop {
     private String description;
 
     @Column(name = "CREATED_AT")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "MODIFIED_AT")
+    @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
     public void open(){
