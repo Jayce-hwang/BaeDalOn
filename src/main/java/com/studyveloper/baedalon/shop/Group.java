@@ -59,6 +59,19 @@ public class Group {
         }
     }
 
+    public void editGroup(String name, String description, GroupStatus status) {
+        changeName(name);
+        changeDescription(description);
+        changeGroupStatus(status);
+    }
+
+    public void swapSortOrder(Group targetGroup) {
+        long originSortOrder = this.sortOrder;
+
+        this.sortOrder = targetGroup.sortOrder;
+        targetGroup.sortOrder = originSortOrder;
+    }
+
     public void changeGroupStatus(GroupStatus status){
         this.status = status;
     }

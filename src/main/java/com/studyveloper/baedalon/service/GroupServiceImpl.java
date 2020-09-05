@@ -7,9 +7,11 @@ import com.studyveloper.baedalon.repository.GroupRepository;
 import com.studyveloper.baedalon.shop.Group;
 import com.studyveloper.baedalon.shop.GroupStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class GroupServiceImpl implements GroupService{
     private final GroupRepository groupRepository;
 
     @Override
-    public Long createGroup(GroupCreateDto groupCreateDto, Long shopId) {
+    public Long createGroup(@NonNull GroupCreateDto groupCreateDto, @NonNull Long shopId) {
         long sortOrder = groupRepository.findGroupCountByShopId(shopId) + 1;
 
         Group group = Group.builder()
@@ -29,43 +31,37 @@ public class GroupServiceImpl implements GroupService{
                 .sortOrder(sortOrder)
                 .build();
 
-        groupRepository.save(group);
+        group = groupRepository.save(group);
 
         return group.getId();
     }
 
     @Override
-    public void editGroup(Long groupId, GroupEditDto groupEditDto) {
-        Group group = groupRepository.getOne(groupId);
+    public void editGroup(@NonNull Long groupId, @NonNull GroupEditDto groupEditDto) {
+        Group group = groupRepository.findById(groupId).orElseThrow(EntityNotFoundException::new);
 
-        String name = groupEditDto.getName();
-        String description = groupEditDto.getDescription();
-        GroupStatus status = groupEditDto.getStatus();
-
-        group.changeName(name);
-        group.changeDescription(description);
-        group.changeGroupStatus(status);
+        group.editGroup(
+                groupEditDto.getName(),
+                groupEditDto.getDescription(),
+                groupEditDto.getStatus()
+        );
     }
 
     @Override
-    public void swapGroupOrder(Long groupId, Long targetGroupId) {
-        Group group = groupRepository.getOne(groupId);
-        Group targetGroup = groupRepository.getOne(targetGroupId);
+    public void swapGroupOrder(@NonNull Long groupId, @NonNull Long targetGroupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(EntityNotFoundException::new);
+        Group targetGroup = groupRepository.findById(targetGroupId).orElseThrow(EntityNotFoundException::new);
 
-        long sortOrder = group.getSortOrder();
-        long targetSortOrder = targetGroup.getSortOrder();
-
-        group.chagneSortOrder(targetSortOrder);
-        targetGroup.chagneSortOrder(sortOrder);
+       group.swapSortOrder(targetGroup);
     }
 
     @Override
-    public void deleteGroup(Long groupId) {
+    public void deleteGroup(@NonNull Long groupId) {
         groupRepository.deleteById(groupId);
     }
 
     @Override
-    public GroupDetails findGroup(Long groupId){
+    public GroupDetails findGroup(@NonNull Long groupId){
         Group result = groupRepository.findById(groupId)
                 .get();
 
@@ -81,7 +77,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    public List<GroupDetails> findGroups(Long shopId) {
+    public List<GroupDetails> findGroups(@NonNull Long shopId) {
         List<Group> results = groupRepository.findByShopId(shopId);
         List<GroupDetails> groupDetailsList = new ArrayList<GroupDetails>();
 
