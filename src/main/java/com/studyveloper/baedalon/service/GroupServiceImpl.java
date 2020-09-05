@@ -62,18 +62,9 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public GroupDetails findGroup(@NonNull Long groupId){
-        Group result = groupRepository.findById(groupId)
-                .get();
+        Group group = groupRepository.findById(groupId).orElseThrow(EntityNotFoundException::new);
 
-        GroupDetails groupDetails = new GroupDetails();
-
-        groupDetails.setDescription(result.getDescription());
-        groupDetails.setId(result.getId());
-        groupDetails.setName(result.getName());
-        groupDetails.setSortOrder(result.getSortOrder());
-        groupDetails.setStatus(result.getStatus());
-
-        return groupDetails;
+        return new GroupDetails(group);
     }
 
     @Override
@@ -82,14 +73,7 @@ public class GroupServiceImpl implements GroupService{
         List<GroupDetails> groupDetailsList = new ArrayList<GroupDetails>();
 
         for(Group result : results) {
-            GroupDetails groupDetails = new GroupDetails();
-            groupDetails.setDescription(result.getDescription());
-            groupDetails.setId(result.getId());
-            groupDetails.setName(result.getName());
-            groupDetails.setSortOrder(result.getSortOrder());
-            groupDetails.setStatus(result.getStatus());
-
-            groupDetailsList.add(groupDetails);
+            groupDetailsList.add(new GroupDetails(result));
         }
 
         return groupDetailsList;
