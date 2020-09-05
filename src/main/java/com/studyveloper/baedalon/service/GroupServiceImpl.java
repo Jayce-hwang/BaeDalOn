@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,19 +21,17 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Long createGroup(GroupCreateDto groupCreateDto, Long shopId) {
-        String name = groupCreateDto.getName();
-        String description = groupCreateDto.getDescription();
-        long count = groupRepository.count() + 1;
+        long sortOrder = groupRepository.findGroupCountByShopId(shopId) + 1;
 
-        Group group = new Group(name, description, count, GroupStatus.SHOWN);
-
-        //샵 레포지토리 필
+        Group group = Group.builder()
+                .name(groupCreateDto.getName())
+                .description(groupCreateDto.getDescription())
+                .sortOrder(sortOrder)
+                .build();
 
         groupRepository.save(group);
 
-        long createdGroupId = group.getId();
-
-        return createdGroupId;
+        return group.getId();
     }
 
     @Override

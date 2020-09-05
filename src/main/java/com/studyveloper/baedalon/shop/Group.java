@@ -47,18 +47,12 @@ public class Group {
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
-    public Group(String name, String description, long sortOrder, GroupStatus status) {
+    @Builder
+    public Group(String name, String description, long sortOrder, Shop shop) {
         this.name = name;
         this.description = description;
         this.sortOrder = sortOrder;
-        this.status = status;
-    }
-
-    public Group(String name, String description, long sortOrder, GroupStatus status, Shop shop) {
-        this.name = name;
-        this.description = description;
-        this.sortOrder = sortOrder;
-        this.status = status;
+        this.status = GroupStatus.SHOWN;
 
         if( shop != null) {
             setShop(shop);
