@@ -1,14 +1,16 @@
-package com.studyveloper.baedalon.dto;
+package com.studyveloper.baedalon.shop.dto;
 
 import com.studyveloper.baedalon.shop.ShopStatus;
 import com.studyveloper.baedalon.user.Owner;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ShopCreateDTO {
     private Long id;
     private Owner owner;
