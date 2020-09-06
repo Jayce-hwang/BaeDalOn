@@ -34,8 +34,7 @@ public class ShopTest {
     private ShopService shopService;
     @Autowired
     private OwnerRepository ownerRepository;
-    @Autowired
-    private EntityManager entityManager;
+
 
     //가게 성공 등록 테스트
     //DisplayName 어캐 하기로했지?
