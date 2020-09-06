@@ -40,7 +40,9 @@ public class ShopTest {
     //DisplayName 어캐 하기로했지?
     @Test
     public void 가게생성(){
-        Owner owner = new Owner((long)0);
+        Owner owner = Owner.builder()
+                .id((long)0)
+                .build();
         owner = ownerRepository.save(owner);
         ShopCreateDTO shopCreateDTO = ShopCreateDTO.builder()
                 .address("가게 주소")
@@ -56,7 +58,9 @@ public class ShopTest {
 
     @Test
     public void 가게정보수정(){
-        Owner owner = new Owner((long)0);
+        Owner owner = Owner.builder()
+                .id((long)0)
+                .build();
         owner = ownerRepository.save(owner);
         ShopCreateDTO shopCreateDTO = ShopCreateDTO.builder()
                 .address("가게 주소")
@@ -84,7 +88,9 @@ public class ShopTest {
 
     @Test
     public void 가게삭제(){
-        Owner owner = new Owner((long)0);
+        Owner owner = Owner.builder()
+                .id((long)0)
+                .build();
         owner = ownerRepository.save(owner);
         ShopCreateDTO shopCreateDTO = ShopCreateDTO.builder()
                 .address("가게 주소")
