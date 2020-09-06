@@ -85,15 +85,9 @@ class GroupServiceImplTest {
 
         long shopId = shop.getId();
 
-        entityManager.flush();
-        entityManager.clear();
+        groupService.createGroup(groupCreateDto, shopId);
+        groupService.createGroup(groupCreateDto2, shopId);
 
-        System.out.println("ID = " + groupService.createGroup(groupCreateDto, shopId));
-
-       entityManager.flush();
-       entityManager.clear();
-
-        System.out.println("ID = " + groupService.createGroup(groupCreateDto2, shopId));
         List<GroupDetails> groupDetailsList = groupService.findGroups(shopId);
 
         assertThat(groupDetailsList.size()).isEqualTo(2);
@@ -101,6 +95,31 @@ class GroupServiceImplTest {
 
     @Test
     public void swapSortOrderTest() {
+        GroupCreateDto groupCreateDto = new GroupCreateDto();
+        groupCreateDto.setDescription("desc");
+        groupCreateDto.setName("name");
 
+        GroupCreateDto groupCreateDto2 = new GroupCreateDto();
+        groupCreateDto2.setDescription("desc");
+        groupCreateDto2.setName("name");
+
+        Shop shop = new Shop();
+        entityManager.persist(shop);
+
+        long shopId = shop.getId();
+
+        Long groupId = groupService.createGroup(groupCreateDto, shopId);
+        Long targetGroupId = groupService.createGroup(groupCreateDto2, shopId);
+
+        Group group = entityManager.find(Group.class, groupId);
+        Group targetGroup =entityManager.find(Group.class, targetGroupId);
+
+        Long sortOrder = group.getSortOrder();
+        Long targetSortOrder = targetGroup.getSortOrder();
+
+        groupService.swapGroupOrder(groupId, targetGroupId);
+
+        assertThat(sortOrder).isEqualTo(targetGroup.getSortOrder());
+        assertThat(targetSortOrder).isEqualTo(group.getSortOrder());
     }
 }
