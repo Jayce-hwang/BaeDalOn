@@ -14,8 +14,6 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Table(name = "GROUPS")
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
 @NoArgsConstructor
 public class Group {
 
@@ -48,10 +46,9 @@ public class Group {
     private LocalDateTime modifiedAt;
 
     @Builder
-    public Group(String name, String description, long sortOrder, Shop shop) {
+    public Group(String name, String description, Shop shop) {
         this.name = name;
         this.description = description;
-        this.sortOrder = sortOrder;
         this.status = GroupStatus.SHOWN;
 
         if( shop != null) {

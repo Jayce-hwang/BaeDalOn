@@ -10,8 +10,10 @@ import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
     Optional<Group> findByName(String name);
-    List<Group> findByShopId(long shopId);
 
-    @Query("SELECT s.id, COUNT(g) FROM Group g LEFT JOIN Shop s WHERE s.id = :shopId GROUP BY s.id")
+    @Query("SELECT g FROM Group g WHERE g.shop.id = :shopId")
+    List<Group> findByShopId(@Param("shopId") long shopId);
+
+    @Query("SELECT COUNT(g) FROM Group g WHERE g.shop.id = :shopId GROUP BY g.shop.id")
     Long findGroupCountByShopId(@Param("shopId") long shopId);
 }

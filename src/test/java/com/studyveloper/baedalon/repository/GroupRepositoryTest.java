@@ -31,11 +31,13 @@ class GroupRepositoryTest {
         group.changeDescription("desc");
         group.changeGroupStatus(GroupStatus.SHOWN);
 
-        long count = groupRepository.count();
+        //long count = groupRepository.count();
 
-        group.chagneSortOrder(count);
+        //group.chagneSortOrder(count);
 
         groupRepository.save(group);
+
+        System.out.println("COUNT = " + group.getSortOrder());
 
         Group findGroup = groupRepository.findById(group.getId()).get();
 
@@ -78,5 +80,46 @@ class GroupRepositoryTest {
 
         assertThat(groups2.size()).isEqualTo(1);
         assertThat(groups2.get(0).getShop().getId()).isEqualTo(shopId);
+    }
+
+    @Test
+    public void findGroupCountByShopId() {
+        Group group = new Group();
+        group.changeName("groupA");
+        group.chagneSortOrder(1);
+        group.changeDescription("desc");
+        group.changeGroupStatus(GroupStatus.SHOWN);
+
+        Group group2 = new Group();
+        group2.changeName("groupA");
+        group2.chagneSortOrder(1);
+        group2.changeDescription("desc");
+        group2.changeGroupStatus(GroupStatus.SHOWN);
+
+        Shop shop = new Shop();
+        Shop shop2 = new Shop();
+
+        entityManager.persist(shop);
+        entityManager.persist(shop2);
+
+        long shopId = shop.getId();
+
+        group.setShop(shop);
+        group2.setShop(shop2);
+
+        entityManager.persist(group);
+        entityManager.persist(group2);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        /*long count = entityManager.createQuery(
+                "SELECT COUNT(g) FROM Group g WHERE g.shop.id = :shopId GROUP BY g.shop.id", Long.class)
+                .setParameter("shopId", shopId)
+                .getSingleResult();*/
+
+        Long count = groupRepository.findGroupCountByShopId(shopId);
+
+        System.out.println("count = " + count);
     }
 }

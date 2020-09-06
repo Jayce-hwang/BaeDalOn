@@ -40,6 +40,9 @@ class GroupServiceImplTest {
 
         long shopId = shop.getId();
 
+        entityManager.flush();
+        entityManager.clear();
+
         long createdGroupId = groupService.createGroup(groupCreateDto, shopId);
 
         GroupDetails groupDetails = groupService.findGroup(createdGroupId);
@@ -82,11 +85,22 @@ class GroupServiceImplTest {
 
         long shopId = shop.getId();
 
-       groupService.createGroup(groupCreateDto, shopId);
-       groupService.createGroup(groupCreateDto2, shopId);
+        entityManager.flush();
+        entityManager.clear();
 
+        System.out.println("ID = " + groupService.createGroup(groupCreateDto, shopId));
+
+       entityManager.flush();
+       entityManager.clear();
+
+        System.out.println("ID = " + groupService.createGroup(groupCreateDto2, shopId));
         List<GroupDetails> groupDetailsList = groupService.findGroups(shopId);
 
         assertThat(groupDetailsList.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void swapSortOrderTest() {
+
     }
 }
