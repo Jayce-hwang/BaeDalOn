@@ -1,7 +1,5 @@
 package com.studyveloper.baedalon.user;
 
-import java.util.List;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
@@ -25,23 +23,8 @@ public class CustomerService {
 	 * 고객 회원가입
 	 */
 	public Long signUp(@NonNull CustomerSignUpDTO customerSignUpDTO) {
-		List<Customer> searchResult = customerRepository.findByLoginIdOrPhoneAndStatus(customerSignUpDTO.getLoginId(), customerSignUpDTO.getPhone(), CustomerStatus.ACTIVATED);
-		
-		searchResult.stream()
-						.filter(x -> x.getPhone().equals(customerSignUpDTO.getPhone()))
-						.findAny()
-						.ifPresent(x -> {
-							throw new RuntimeException("이미 가입된 전화번호다.");
-						});
-		
-		searchResult.stream()
-						.filter(x -> x.getLoginId().equals(customerSignUpDTO.getLoginId()))
-						.findAny()
-						.ifPresent(x -> {
-							throw new RuntimeException("이미 있는 아이디다.");
-						});
-		
-		//Todo : 인코딩은 security 구현할 때 추가 예정
+		checkDuplicatedPhone(customerSignUpDTO.getPhone());
+		checkDuplicatedLoginId(customerSignUpDTO.getLoginId());
 		
 		Customer customer = Customer.builder()
 				.loginId(customerSignUpDTO.getLoginId())
@@ -53,7 +36,7 @@ public class CustomerService {
 		customer = customerRepository.save(customer);
 		return customer.getId();
 	}
-
+	
 	/*
 	 * 고객 로그인
 	 */
@@ -113,5 +96,21 @@ public class CustomerService {
 //	  public List<CustomerDetails> search(Pageable pageable, SearchCondition searchCondition){
 //	  	SearchCondition이 머야
 //	  }
+	
+	public void checkDuplicatedPhone(String phone) {
+		boolean isDuplicated = customerRepository.existsByPhoneAndStatus(phone, CustomerStatus.ACTIVATED);
+		
+		if(isDuplicated) {
+			throw new RuntimeException("전화번호 중복");
+		}
+	}
+	
+	public void checkDuplicatedLoginId(String loginId) {
+		boolean isDuplicated = customerRepository.existsByLoginIdAndStatus(loginId, CustomerStatus.ACTIVATED);
+		
+		if(isDuplicated) {
+			throw new RuntimeException("로그인 아이디 중복");
+		}
+	}
 
 }

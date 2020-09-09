@@ -1,15 +1,10 @@
 package com.studyveloper.baedalon.user;
 
-import java.util.List;
-
 import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.studyveloper.baedalon.user.dto.CustomerDetails;
-import com.studyveloper.baedalon.user.dto.CustomerEditDTO;
-import com.studyveloper.baedalon.user.dto.CustomerSignInDTO;
-import com.studyveloper.baedalon.user.dto.CustomerSignUpDTO;
 import com.studyveloper.baedalon.user.dto.OwnerDetails;
 import com.studyveloper.baedalon.user.dto.OwnerEditDTO;
 import com.studyveloper.baedalon.user.dto.OwnerSignInDTO;
@@ -28,21 +23,8 @@ public class OwnerService {
 	 * 업주 회원가입
 	 */
 	public Long signUp(@NonNull OwnerSignUpDTO ownerSignUpDTO) {
-		List<Owner> searchResult = ownerRepository.findByEmailOrPhoneAndStatus(ownerSignUpDTO.getEmail(), ownerSignUpDTO.getPhone(), OwnerStatus.ACTIVATED);
-		
-		searchResult.stream()
-						.filter(x -> x.getPhone().equals(ownerSignUpDTO.getPhone()))
-						.findAny()
-						.ifPresent(x -> {
-							throw new RuntimeException("이미 가입된 전화번호다.");
-						});
-		
-		searchResult.stream()
-						.filter(x -> x.getEmail().equals(ownerSignUpDTO.getEmail()))
-						.findAny()
-						.ifPresent(x -> {
-							throw new RuntimeException("이미 가입된 이메일이다.");
-						});
+		checkDuplicatedPhone(ownerSignUpDTO.getPhone());
+		checkDuplicatedEmail(ownerSignUpDTO.getEmail());
 		
 		Owner owner = Owner.builder()
 				.email(ownerSignUpDTO.getEmail())
@@ -106,5 +88,21 @@ public class OwnerService {
 											owner.getModifiedAt()
 										);
 		return findResult;
+	}
+	
+	public void checkDuplicatedPhone(String phone) {
+		boolean isDuplicated = ownerRepository.existsByPhoneAndStatus(phone, OwnerStatus.ACTIVATED);
+		
+		if(isDuplicated) {
+			throw new RuntimeException("전화번호 중복");
+		}
+	}
+	
+	public void checkDuplicatedEmail(String email) {
+		boolean isDuplicated = ownerRepository.existsByEmailAndStatus(email, OwnerStatus.ACTIVATED);
+		
+		if(isDuplicated) {
+			throw new RuntimeException("이메일 중복");
+		}
 	}
 }
