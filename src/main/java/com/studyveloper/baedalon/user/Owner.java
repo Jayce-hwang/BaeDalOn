@@ -39,7 +39,7 @@ public class Owner {
     private LocalDateTime modifiedAt;
     
     protected Owner() {
-    	status = OwnerStatus.Activated;
+    	status = OwnerStatus.ACTIVATED;
     	createdAt = LocalDateTime.now();
     	modifiedAt = LocalDateTime.now();
     }
@@ -65,6 +65,6 @@ public class Owner {
     }
     
     public void inactivate() {
-    	this.status = OwnerStatus.Inactivated;
+    	this.status = OwnerStatus.INACTIVATED;
     }
 }

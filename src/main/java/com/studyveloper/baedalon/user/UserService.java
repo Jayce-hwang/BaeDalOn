@@ -29,7 +29,7 @@ public class UserService {
 	 * 고객 회원가입
 	 */
 	public Long signUp(@NonNull CustomerSignUpDTO customerSignUpDTO) {
-		List<Customer> searchResult = customerRepository.findByLoginIdOrPhoneAndStatus(customerSignUpDTO.getLoginId(), customerSignUpDTO.getPhone(), CustomerStatus.Activated);
+		List<Customer> searchResult = customerRepository.findByLoginIdOrPhoneAndStatus(customerSignUpDTO.getLoginId(), customerSignUpDTO.getPhone(), CustomerStatus.ACTIVATED);
 		
 		searchResult.stream()
 						.filter(x -> x.getPhone().equals(customerSignUpDTO.getPhone()))
@@ -62,7 +62,7 @@ public class UserService {
 	 * 업주 회원가입
 	 */
 	public Long signUp(@NonNull OwnerSignUpDTO ownerSignUpDTO) {
-		List<Owner> searchResult = ownerRepository.findByEmailOrPhoneAndStatus(ownerSignUpDTO.getEmail(), ownerSignUpDTO.getPhone(), OwnerStatus.Activated);
+		List<Owner> searchResult = ownerRepository.findByEmailOrPhoneAndStatus(ownerSignUpDTO.getEmail(), ownerSignUpDTO.getPhone(), OwnerStatus.ACTIVATED);
 		
 		searchResult.stream()
 						.filter(x -> x.getPhone().equals(ownerSignUpDTO.getPhone()))
@@ -92,7 +92,7 @@ public class UserService {
 	 * 고객 로그인
 	 */
 	public Customer signIn(CustomerSignInDTO customerSignInDTO) {
-		Customer customer = customerRepository.findByLoginIdAndStatus(customerSignInDTO.getLoginId(), CustomerStatus.Activated).orElseThrow(EntityNotFoundException::new);
+		Customer customer = customerRepository.findByLoginIdAndStatus(customerSignInDTO.getLoginId(), CustomerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
 		
 		//Todo : spring-security로 전환 - 고객과 업주를 어떻게 나누지?
 		if(customer.getPassword().equals(customerSignInDTO.getPassword())) {
@@ -106,7 +106,7 @@ public class UserService {
 	 * 업주 로그인
 	 */
 	public Owner signIn(OwnerSignInDTO ownerSignInDTO) {
-		Owner owner = ownerRepository.findByEmailAndStatus(ownerSignInDTO.getEmail(), OwnerStatus.Activated).orElseThrow(EntityNotFoundException::new);
+		Owner owner = ownerRepository.findByEmailAndStatus(ownerSignInDTO.getEmail(), OwnerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
 		
 		if(owner.getPassword().equals(ownerSignInDTO.getPassword())) {
 			return owner;

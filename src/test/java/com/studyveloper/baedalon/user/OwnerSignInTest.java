@@ -46,7 +46,7 @@ public class OwnerSignInTest {
 		assertEquals(tester1.getName(), Owner.getName());
 		assertEquals(tester1.getPassword(), Owner.getPassword());
 		assertEquals(tester1.getPhone(), Owner.getPhone());
-		assertEquals(OwnerStatus.Activated, Owner.getStatus());
+		assertEquals(OwnerStatus.ACTIVATED, Owner.getStatus());
 	}
 	
 	@Test

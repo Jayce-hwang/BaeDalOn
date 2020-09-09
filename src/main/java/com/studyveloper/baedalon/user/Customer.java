@@ -47,7 +47,7 @@ public class Customer {
 	private String loginId;
 	
 	protected Customer() {
-		status = CustomerStatus.Activated;
+		status = CustomerStatus.ACTIVATED;
 		createdAt = LocalDateTime.now();
 		modifiedAt = LocalDateTime.now();
 	}
@@ -74,6 +74,6 @@ public class Customer {
 	}
 	
 	public void inactivate() {
-		this.status = CustomerStatus.Inactivated;
+		this.status = CustomerStatus.INACTIVATED;
 	}
 }

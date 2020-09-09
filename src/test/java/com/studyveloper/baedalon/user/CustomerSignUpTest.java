@@ -41,7 +41,7 @@ public class CustomerSignUpTest {
 		assertEquals(tester1.getNickname(), customerDetails.getNickname());
 		assertEquals(tester1.getPassword(), customerDetails.getPassword());
 		assertEquals(tester1.getPhone(), customerDetails.getPhone());
-		assertEquals(CustomerStatus.Activated, customerDetails.getStatus());
+		assertEquals(CustomerStatus.ACTIVATED, customerDetails.getStatus());
 	}
 	
 	@Test
