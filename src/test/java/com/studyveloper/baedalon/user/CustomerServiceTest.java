@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.studyveloper.baedalon.user.dto.CustomerDetails;
 import com.studyveloper.baedalon.user.dto.CustomerEditDTO;
 import com.studyveloper.baedalon.user.dto.CustomerSignInDTO;
 import com.studyveloper.baedalon.user.dto.CustomerSignUpDTO;
@@ -153,5 +154,20 @@ public class CustomerServiceTest {
 		assertThat(customer)
 					.isNotNull()
 					.hasFieldOrPropertyWithValue("status", CustomerStatus.INACTIVATED);
+	}
+	
+	@Test
+	@DisplayName("고객 검색 성공")
+	public void findCustomer_success() {
+		// Given
+		CustomerSignUpDTO customerSignUpDTO = new CustomerSignUpDTO("test1@test.com", "01011111111", "tester1", "testId1", "testPwd1");
+		Long id = customerService.signUp(customerSignUpDTO);
+		
+		// When
+		CustomerDetails customerDetails= customerService.findCustomer(id);
+		Customer customer = customerRepository.findById(id).get();
+		
+		// Then
+		assertThat(customerDetails).isEqualToIgnoringGivenFields(customer, "id", "password");
 	}
 }

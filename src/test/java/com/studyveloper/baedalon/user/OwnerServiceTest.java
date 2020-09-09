@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.studyveloper.baedalon.user.dto.OwnerDetails;
 import com.studyveloper.baedalon.user.dto.OwnerEditDTO;
 import com.studyveloper.baedalon.user.dto.OwnerSignInDTO;
 import com.studyveloper.baedalon.user.dto.OwnerSignUpDTO;
@@ -153,5 +154,20 @@ public class OwnerServiceTest {
 		assertThat(owner)
 					.isNotNull()
 					.hasFieldOrPropertyWithValue("status", OwnerStatus.INACTIVATED);
+	}
+	
+	@Test
+	@DisplayName("업주 검색 성공")
+	public void findOwner_success() {
+		// Given
+		OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+		Long id = ownerService.signUp(ownerSignUpDTO);
+		
+		// When
+		OwnerDetails ownerDetails = ownerService.findOwner(id);
+		Owner owner = ownerRepository.findById(id).get();
+		
+		// Then
+		assertThat(ownerDetails).isEqualToIgnoringGivenFields(owner, "id");
 	}
 }
