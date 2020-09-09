@@ -137,4 +137,21 @@ public class CustomerServiceTest {
 					.isNotNull()
 					.isEqualToComparingOnlyGivenFields(customerEditDTO, "phone", "nickname", "password");
 	}
+	
+	@Test
+	@DisplayName("고객 회원탈퇴 성공")
+	public void delete_success() {
+		// Given
+		CustomerSignUpDTO customerSignUpDTO = new CustomerSignUpDTO("test1@test.com", "01011111111", "tester1", "testId1", "testPwd1");
+		Long id = customerService.signUp(customerSignUpDTO);
+		
+		// When
+		customerService.deleteCustomer(id);
+		
+		// Then
+		Customer customer = customerRepository.getOne(id);
+		assertThat(customer)
+					.isNotNull()
+					.hasFieldOrPropertyWithValue("status", CustomerStatus.INACTIVATED);
+	}
 }

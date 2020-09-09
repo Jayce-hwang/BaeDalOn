@@ -137,4 +137,21 @@ public class OwnerServiceTest {
 					.isNotNull()
 					.isEqualToComparingOnlyGivenFields(ownerEditDTO, "phone", "name", "password");
 	}
+	
+	@Test
+	@DisplayName("업주 회원탈퇴 성공")
+	public void delete_success() {
+		// Given
+		OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+		Long id = ownerService.signUp(ownerSignUpDTO);
+		
+		// When
+		ownerService.deleteOwner(id);
+		
+		// Then
+		Owner owner = ownerRepository.getOne(id);
+		assertThat(owner)
+					.isNotNull()
+					.hasFieldOrPropertyWithValue("status", OwnerStatus.INACTIVATED);
+	}
 }

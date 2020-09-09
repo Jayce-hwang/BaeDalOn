@@ -59,7 +59,7 @@ public class CustomerService {
 	 * 고객 회원탈퇴
 	 */
 	public void deleteCustomer(@NonNull Long id) {
-		Customer customer = customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+		Customer customer = getActiveCustomer(id);
 		
 		// Todo : 회원탈퇴 pre-condition 체크
 		// 진행중인 주문이 있다거나??
@@ -118,5 +118,9 @@ public class CustomerService {
 	
 	private Customer getActiveCustomer(String loginId) {
 		return customerRepository.findByLoginIdAndStatus(loginId, CustomerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
+	}
+	
+	private Customer getActiveCustomer(Long id) {
+		return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
 }

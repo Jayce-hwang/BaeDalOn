@@ -57,7 +57,7 @@ public class OwnerService {
 	 * 업주 회원탈퇴
 	 */
 	public void deleteOwner(@NonNull Long id) {
-		Owner owner = ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+		Owner owner = getActiveOwner(id);
 		
 		// Todo : 회원탈퇴 pre-condition 체크
 		// 진행중인 주문이 있다거나??
@@ -111,5 +111,9 @@ public class OwnerService {
 	
 	private Owner getActiveOwner(String email) {
 		return ownerRepository.findByEmailAndStatus(email, OwnerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
+	}
+	
+	private Owner getActiveOwner(Long id) {
+		return ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
 }
