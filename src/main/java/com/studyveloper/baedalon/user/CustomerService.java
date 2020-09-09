@@ -41,14 +41,10 @@ public class CustomerService {
 	 * 고객 로그인
 	 */
 	public Customer signIn(CustomerSignInDTO customerSignInDTO) {
-		Customer customer = customerRepository.findByLoginIdAndStatus(customerSignInDTO.getLoginId(), CustomerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
-		
 		//Todo : spring-security로 전환 - 고객과 업주를 어떻게 나누지?
-		if(customer.getPassword().equals(customerSignInDTO.getPassword())) {
-			return customer;
-		}
-
-		return null;
+		Customer customer = getActiveCustomer(customerSignInDTO.getLoginId());
+		validatePassword(customer, customerSignInDTO.getPassword());
+		return customer;
 	}
 	
 	/*
@@ -112,5 +108,19 @@ public class CustomerService {
 			throw new RuntimeException("로그인 아이디 중복");
 		}
 	}
-
+	
+	public void validatePassword(String loginId, String password) {
+		Customer customer = getActiveCustomer(loginId);
+		validatePassword(customer, password);
+	}
+	
+	private void validatePassword(Customer customer, String password) {
+		if(!customer.getPassword().equals(password)) {
+			throw new RuntimeException("비밀번호 틀림");
+		}
+	}
+	
+	private Customer getActiveCustomer(String loginId) {
+		return customerRepository.findByLoginIdAndStatus(loginId, CustomerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
+	}
 }

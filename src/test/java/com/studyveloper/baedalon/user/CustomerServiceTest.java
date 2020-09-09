@@ -3,12 +3,15 @@ package com.studyveloper.baedalon.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.studyveloper.baedalon.user.dto.CustomerSignInDTO;
 import com.studyveloper.baedalon.user.dto.CustomerSignUpDTO;
 
 @SpringBootTest
@@ -68,5 +71,51 @@ public class CustomerServiceTest {
 				})
 			.isInstanceOf(RuntimeException.class)
 			.hasMessage("로그인 아이디 중복");		
+	}
+	
+	@Test
+	@DisplayName("고객 로그인 성공")
+	public void signIn_success() {
+		// Given
+		CustomerSignUpDTO customerSignUpDTO = new CustomerSignUpDTO("test1@test.com", "01011111111", "tester1", "testId1", "testPwd1");
+		CustomerSignInDTO customerSignInDTO = new CustomerSignInDTO(customerSignUpDTO.getLoginId(), customerSignUpDTO.getPassword());
+		customerService.signUp(customerSignUpDTO);
+
+		// When
+		Customer customer = customerService.signIn(customerSignInDTO);
+		
+		// Then
+		assertThat(customer)
+					.isNotNull()
+					.isEqualToComparingOnlyGivenFields(customerSignUpDTO, "email", "phone", "nickname", "loginId", "password")
+					.extracting("status").isEqualTo(CustomerStatus.ACTIVATED);					
+	}
+	
+	@Test
+	@DisplayName("고객 로그인 실패 : 비밀번호 불일치")
+	public void signIn_fail_byWrongPassword() {
+		// Given
+		CustomerSignUpDTO customerSignUpDTO = new CustomerSignUpDTO("test1@test.com", "01011111111", "tester1", "testId1", "testPwd1");
+		CustomerSignInDTO customerSignInDTO = new CustomerSignInDTO(customerSignUpDTO.getLoginId(), customerSignUpDTO.getPassword() + "wrong");
+		customerService.signUp(customerSignUpDTO);
+		
+		// When, Then
+		assertThatThrownBy(() -> {customerService.signIn(customerSignInDTO);})
+				.isInstanceOf(RuntimeException.class)
+				.hasMessage("비밀번호 틀림");
+	}
+	
+	@Test
+	@DisplayName("고객 로그인 실패 : 존재하지 않는 로그인 아이디")
+	public void signIn_fail_byNonExistentLoginId() {
+		// Given
+		CustomerSignUpDTO customerSignUpDTO = new CustomerSignUpDTO("test1@test.com", "01011111111", "tester1", "testId1", "testPwd1");
+		CustomerSignInDTO customerSignInDTO = new CustomerSignInDTO(customerSignUpDTO.getLoginId() + "nonExist", customerSignUpDTO.getPassword());
+		customerService.signUp(customerSignUpDTO);
+		
+		// When, Then
+		assertThatThrownBy(() -> {
+			customerService.signIn(customerSignInDTO);
+		}).isInstanceOf(EntityNotFoundException.class);
 	}
 }

@@ -3,12 +3,15 @@ package com.studyveloper.baedalon.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.studyveloper.baedalon.user.dto.OwnerSignInDTO;
 import com.studyveloper.baedalon.user.dto.OwnerSignUpDTO;
 
 @SpringBootTest
@@ -68,5 +71,51 @@ public class OwnerServiceTest {
 				})
 			.isInstanceOf(RuntimeException.class)
 			.hasMessage("이메일 중복");		
+	}
+	
+	@Test
+	@DisplayName("업주 로그인 성공")
+	public void signIn_success() {
+		// Given
+		OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+		OwnerSignInDTO ownerSignInDTO = new OwnerSignInDTO(ownerSignUpDTO.getEmail(), ownerSignUpDTO.getPassword());
+		ownerService.signUp(ownerSignUpDTO);
+
+		// When
+		Owner owner = ownerService.signIn(ownerSignInDTO);
+		
+		// Then
+		assertThat(owner)
+					.isNotNull()
+					.isEqualToComparingOnlyGivenFields(ownerSignUpDTO, "email", "phone", "name", "password")
+					.extracting("status").isEqualTo(OwnerStatus.ACTIVATED);					
+	}
+	
+	@Test
+	@DisplayName("업주 로그인 실패 : 비밀번호 불일치")
+	public void signIn_fail_byWrongPassword() {
+		// Given
+		OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+		OwnerSignInDTO ownerSignInDTO = new OwnerSignInDTO(ownerSignUpDTO.getEmail(), ownerSignUpDTO.getPassword() + "wrong");
+		ownerService.signUp(ownerSignUpDTO);
+		
+		// When, Then
+		assertThatThrownBy(() -> {ownerService.signIn(ownerSignInDTO);})
+				.isInstanceOf(RuntimeException.class)
+				.hasMessage("비밀번호 틀림");
+	}
+	
+	@Test
+	@DisplayName("업주 로그인 실패 : 존재하지 않는 이메일")
+	public void signIn_fail_byNonExistentLoginId() {
+		// Given
+		OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+		OwnerSignInDTO ownerSignInDTO = new OwnerSignInDTO(ownerSignUpDTO.getEmail() + "nonExist", ownerSignUpDTO.getPassword()); 
+		ownerService.signUp(ownerSignUpDTO);
+		
+		// When, Then
+		assertThatThrownBy(() -> {
+			ownerService.signIn(ownerSignInDTO);
+		}).isInstanceOf(EntityNotFoundException.class);
 	}
 }

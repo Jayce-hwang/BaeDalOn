@@ -40,13 +40,9 @@ public class OwnerService {
 	 * 업주 로그인
 	 */
 	public Owner signIn(OwnerSignInDTO ownerSignInDTO) {
-		Owner owner = ownerRepository.findByEmailAndStatus(ownerSignInDTO.getEmail(), OwnerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
-		
-		if(owner.getPassword().equals(ownerSignInDTO.getPassword())) {
-			return owner;
-		}
-
-		return null;	  
+		Owner owner = getActiveOwner(ownerSignInDTO.getEmail());
+		validatePassword(owner, ownerSignInDTO.getPassword());
+		return owner;	  
 	}
 
 	/*
@@ -104,5 +100,20 @@ public class OwnerService {
 		if(isDuplicated) {
 			throw new RuntimeException("이메일 중복");
 		}
+	}
+	
+	public void validatePassword(String email, String password) {
+		Owner owner = getActiveOwner(email);
+		validatePassword(owner, password);
+	}
+	
+	private void validatePassword(Owner owner, String password) {
+		if(!owner.getPassword().equals(password)) {
+			throw new RuntimeException("비밀번호 틀림");
+		}
+	}
+	
+	private Owner getActiveOwner(String email) {
+		return ownerRepository.findByEmailAndStatus(email, OwnerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
 	}
 }
