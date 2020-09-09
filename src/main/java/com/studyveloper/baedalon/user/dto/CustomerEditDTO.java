@@ -12,7 +12,6 @@ import lombok.Setter;
 public class CustomerEditDTO {
 	private String phone;
 	private String nickname;
-	private String newPassword;
-	private String oldPassword;
-	private Long id;
+	private String loginId;
+	private String password;
 }

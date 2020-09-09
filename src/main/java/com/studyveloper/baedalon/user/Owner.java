@@ -53,14 +53,10 @@ public class Owner {
     	this.password = password;
     }
     
-    public void update(String phone, String name, String newPassword, String oldPassword) {
-    	if(!this.password.equals(oldPassword)) {
-    		// throw new checked exception : 비밀번호 틀림
-    	}
-    	
+    public void update(String phone, String name, String password) {
     	this.phone = phone;
     	this.name = name;
-    	this.password = newPassword;
+    	this.password = password;
     	this.modifiedAt = LocalDateTime.now();
     }
     

@@ -62,14 +62,10 @@ public class Customer {
 		this.loginId = loginId;
 	}
 	
-	public void update(String phone, String nickname, String newPassword, String oldPassword) {
-		if(!this.password.equals(oldPassword)) {
-			// throw new checked exception : 비밀번호 틀림
-		}
-		
+	public void update(String phone, String nickname, String password) {
 		this.phone = phone;
 		this.nickname = nickname;
-		this.password = newPassword;
+		this.password = password;
 		this.modifiedAt = LocalDateTime.now();
 	}
 	

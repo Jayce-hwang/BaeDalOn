@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.studyveloper.baedalon.user.dto.OwnerEditDTO;
 import com.studyveloper.baedalon.user.dto.OwnerSignInDTO;
 import com.studyveloper.baedalon.user.dto.OwnerSignUpDTO;
 
@@ -117,5 +118,23 @@ public class OwnerServiceTest {
 		assertThatThrownBy(() -> {
 			ownerService.signIn(ownerSignInDTO);
 		}).isInstanceOf(EntityNotFoundException.class);
+	}
+	
+	@Test
+	@DisplayName("업주 정보수정 성공")
+	public void edit_success() {
+		// Given
+		OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+		OwnerEditDTO ownerEditDTO = new OwnerEditDTO("test1@test.com", "01022222222", "tester2", "testPwd2"); 
+		Long id = ownerService.signUp(ownerSignUpDTO);
+		
+		// When
+		ownerService.edit(ownerEditDTO);
+		
+		// Then
+		Owner owner = ownerRepository.getOne(id);
+		assertThat(owner)
+					.isNotNull()
+					.isEqualToComparingOnlyGivenFields(ownerEditDTO, "phone", "name", "password");
 	}
 }

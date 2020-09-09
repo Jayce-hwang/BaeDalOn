@@ -51,12 +51,8 @@ public class CustomerService {
 	 * 고객 정보 수정
 	 */
 	public void edit(@NonNull CustomerEditDTO customerEditDTO) {		
-		Customer customer = customerRepository.findById(customerEditDTO.getId()).orElseThrow(EntityNotFoundException::new);
-		customer.update(
-				customerEditDTO.getPhone(), 
-				customerEditDTO.getNickname(), 
-				customerEditDTO.getNewPassword(),
-				customerEditDTO.getOldPassword());
+		Customer customer = getActiveCustomer(customerEditDTO.getLoginId());
+		customer.update(customerEditDTO.getPhone(), customerEditDTO.getNickname(), customerEditDTO.getPassword());
 	}
 
 	/*

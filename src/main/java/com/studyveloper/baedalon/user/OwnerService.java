@@ -49,12 +49,8 @@ public class OwnerService {
 	 * 업주 정보 수정
 	 */
 	public void edit(@NonNull OwnerEditDTO ownerEditDTO) {
-		Owner owner = ownerRepository.findById(ownerEditDTO.getId()).orElseThrow(EntityNotFoundException::new);;
-		owner.update(
-				ownerEditDTO.getPhone(), 
-				ownerEditDTO.getName(), 
-				ownerEditDTO.getNewPassword(), 
-				ownerEditDTO.getOldPassword());
+		Owner owner = getActiveOwner(ownerEditDTO.getEmail());
+		owner.update(ownerEditDTO.getPhone(), ownerEditDTO.getName(), ownerEditDTO.getPassword());
 	}
 
 	/*

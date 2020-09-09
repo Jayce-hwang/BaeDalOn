@@ -10,10 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OwnerEditDTO {
-	private Long id;
 	private String email;
     private String phone;
     private String name;
-    private String newPassword;
-    private String oldPassword;
+    private String password;
 }

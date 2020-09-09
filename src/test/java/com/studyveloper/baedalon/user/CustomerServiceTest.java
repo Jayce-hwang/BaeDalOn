@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.studyveloper.baedalon.user.dto.CustomerEditDTO;
 import com.studyveloper.baedalon.user.dto.CustomerSignInDTO;
 import com.studyveloper.baedalon.user.dto.CustomerSignUpDTO;
 
@@ -117,5 +118,23 @@ public class CustomerServiceTest {
 		assertThatThrownBy(() -> {
 			customerService.signIn(customerSignInDTO);
 		}).isInstanceOf(EntityNotFoundException.class);
+	}
+	
+	@Test
+	@DisplayName("고객 정보수정 성공")
+	public void edit_success() {
+		// Given
+		CustomerSignUpDTO customerSignUpDTO = new CustomerSignUpDTO("test1@test.com", "01011111111", "tester1", "testId1", "testPwd1");
+		CustomerEditDTO customerEditDTO = new CustomerEditDTO("01022222222","tester2","testId1", "testPwd2");
+		Long id = customerService.signUp(customerSignUpDTO);
+		
+		// When
+		customerService.edit(customerEditDTO);
+		
+		// Then
+		Customer customer = customerRepository.getOne(id);
+		assertThat(customer)
+					.isNotNull()
+					.isEqualToComparingOnlyGivenFields(customerEditDTO, "phone", "nickname", "password");
 	}
 }
