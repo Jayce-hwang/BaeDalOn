@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.studyveloper.baedalon.user.dto.CustomerDetails;
@@ -24,6 +25,9 @@ public class CustomerServiceTest {
 	
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Test
 	@DisplayName("고객 회원가입 성공")
@@ -41,6 +45,7 @@ public class CustomerServiceTest {
 					.isNotNull()
 					.isEqualToComparingOnlyGivenFields(customerSignUpDTO, "email", "phone", "nickname", "loginId")
 					.extracting("status").isEqualTo(CustomerStatus.ACTIVATED);
+		assertThat(passwordEncoder.matches(customerSignUpDTO.getPassword(), customer.getPassword())).isTrue();
 	}
 	
 	@Test
@@ -89,8 +94,10 @@ public class CustomerServiceTest {
 		// Then
 		assertThat(customer)
 					.isNotNull()
-					.isEqualToComparingOnlyGivenFields(customerSignUpDTO, "email", "phone", "nickname", "loginId", "password")
-					.extracting("status").isEqualTo(CustomerStatus.ACTIVATED);					
+					.isEqualToComparingOnlyGivenFields(customerSignUpDTO, "email", "phone", "nickname", "loginId")
+					.extracting("status").isEqualTo(CustomerStatus.ACTIVATED);
+		assertThat(passwordEncoder.matches(customerSignUpDTO.getPassword(), customer.getPassword())).isTrue();
+		
 	}
 	
 	@Test
@@ -136,7 +143,8 @@ public class CustomerServiceTest {
 		Customer customer = customerRepository.getOne(id);
 		assertThat(customer)
 					.isNotNull()
-					.isEqualToComparingOnlyGivenFields(customerEditDTO, "phone", "nickname", "password");
+					.isEqualToComparingOnlyGivenFields(customerEditDTO, "phone", "nickname");
+		assertThat(passwordEncoder.matches(customerEditDTO.getPassword(), customer.getPassword())).isTrue();
 	}
 	
 	@Test

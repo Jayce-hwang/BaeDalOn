@@ -2,6 +2,7 @@ package com.studyveloper.baedalon.user;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class CustomerService {
 	private final CustomerRepository customerRepository;
-
+	private final PasswordEncoder passwordEncoder;
+	
 	/*
 	 * 고객 회원가입
 	 */
@@ -28,7 +30,7 @@ public class CustomerService {
 		
 		Customer customer = Customer.builder()
 				.loginId(customerSignUpDTO.getLoginId())
-				.password(customerSignUpDTO.getPassword())
+				.password(passwordEncoder.encode(customerSignUpDTO.getPassword()))
 				.email(customerSignUpDTO.getEmail())
 				.phone(customerSignUpDTO.getPhone())
 				.nickname(customerSignUpDTO.getNickname())
@@ -52,7 +54,7 @@ public class CustomerService {
 	 */
 	public void edit(@NonNull CustomerEditDTO customerEditDTO) {		
 		Customer customer = getActiveCustomer(customerEditDTO.getLoginId());
-		customer.update(customerEditDTO.getPhone(), customerEditDTO.getNickname(), customerEditDTO.getPassword());
+		customer.update(customerEditDTO.getPhone(), customerEditDTO.getNickname(), passwordEncoder.encode(customerEditDTO.getPassword()));
 	}
 
 	/*
@@ -76,7 +78,6 @@ public class CustomerService {
 											customer.getEmail(),
 											customer.getPhone(),
 											customer.getNickname(),
-											customer.getPassword(),
 											customer.getStatus(),
 											customer.getCreatedAt(),
 											customer.getModifiedAt(),
@@ -111,7 +112,7 @@ public class CustomerService {
 	}
 	
 	private void validatePassword(Customer customer, String password) {
-		if(!customer.getPassword().equals(password)) {
+		if(!passwordEncoder.matches(password, customer.getPassword())) {
 			throw new RuntimeException("비밀번호 틀림");
 		}
 	}

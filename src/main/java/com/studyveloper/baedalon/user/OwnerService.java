@@ -2,6 +2,7 @@ package com.studyveloper.baedalon.user;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class OwnerService {
 	private final OwnerRepository ownerRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	/*
 	 * 업주 회원가입
@@ -29,7 +31,7 @@ public class OwnerService {
 		Owner owner = Owner.builder()
 				.email(ownerSignUpDTO.getEmail())
 				.phone(ownerSignUpDTO.getPhone())
-				.password(ownerSignUpDTO.getPassword())
+				.password(passwordEncoder.encode(ownerSignUpDTO.getPassword()))
 				.name(ownerSignUpDTO.getName())
 				.build();
 		owner = ownerRepository.save(owner);
@@ -50,7 +52,7 @@ public class OwnerService {
 	 */
 	public void edit(@NonNull OwnerEditDTO ownerEditDTO) {
 		Owner owner = getActiveOwner(ownerEditDTO.getEmail());
-		owner.update(ownerEditDTO.getPhone(), ownerEditDTO.getName(), ownerEditDTO.getPassword());
+		owner.update(ownerEditDTO.getPhone(), ownerEditDTO.getName(), passwordEncoder.encode(ownerEditDTO.getPassword()));
 	}
 
 	/*
@@ -74,7 +76,6 @@ public class OwnerService {
 											owner.getEmail(),
 											owner.getPhone(),
 											owner.getName(),
-											owner.getPassword(),
 											owner.getStatus(),
 											owner.getCreatedAt(),
 											owner.getModifiedAt()
@@ -104,7 +105,7 @@ public class OwnerService {
 	}
 	
 	private void validatePassword(Owner owner, String password) {
-		if(!owner.getPassword().equals(password)) {
+		if(!passwordEncoder.matches(password, owner.getPassword())) {
 			throw new RuntimeException("비밀번호 틀림");
 		}
 	}

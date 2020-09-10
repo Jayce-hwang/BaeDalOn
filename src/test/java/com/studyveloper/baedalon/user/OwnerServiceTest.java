@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.studyveloper.baedalon.user.dto.OwnerDetails;
@@ -24,6 +25,9 @@ public class OwnerServiceTest {
 	
 	@Autowired
 	private OwnerRepository ownerRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Test
 	@DisplayName("업주 회원가입 성공")
@@ -41,6 +45,7 @@ public class OwnerServiceTest {
 					.isNotNull()
 					.isEqualToComparingOnlyGivenFields(ownerSignUpDTO, "email", "phone", "name")
 					.extracting("status").isEqualTo(OwnerStatus.ACTIVATED);
+		assertThat(passwordEncoder.matches(ownerSignUpDTO.getPassword(), owner.getPassword())).isTrue();
 	}
 	
 	@Test
@@ -89,8 +94,9 @@ public class OwnerServiceTest {
 		// Then
 		assertThat(owner)
 					.isNotNull()
-					.isEqualToComparingOnlyGivenFields(ownerSignUpDTO, "email", "phone", "name", "password")
-					.extracting("status").isEqualTo(OwnerStatus.ACTIVATED);					
+					.isEqualToComparingOnlyGivenFields(ownerSignUpDTO, "email", "phone", "name")
+					.extracting("status").isEqualTo(OwnerStatus.ACTIVATED);
+		assertThat(passwordEncoder.matches(ownerSignUpDTO.getPassword(), owner.getPassword())).isTrue();
 	}
 	
 	@Test
@@ -136,7 +142,8 @@ public class OwnerServiceTest {
 		Owner owner = ownerRepository.getOne(id);
 		assertThat(owner)
 					.isNotNull()
-					.isEqualToComparingOnlyGivenFields(ownerEditDTO, "phone", "name", "password");
+					.isEqualToComparingOnlyGivenFields(ownerEditDTO, "phone", "name");
+		assertThat(passwordEncoder.matches(ownerEditDTO.getPassword(), owner.getPassword())).isTrue();
 	}
 	
 	@Test

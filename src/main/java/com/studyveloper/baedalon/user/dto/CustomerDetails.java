@@ -17,7 +17,6 @@ public class CustomerDetails {
 	private String email;
 	private String phone;
 	private String nickname;
-	private String password;
 	private CustomerStatus status;
 	private LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;

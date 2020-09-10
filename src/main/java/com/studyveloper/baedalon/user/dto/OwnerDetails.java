@@ -17,7 +17,6 @@ public class OwnerDetails {
 	private String email;
 	private String phone;
 	private String name;
-	private String password;
 	private OwnerStatus status;
 	private LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;
