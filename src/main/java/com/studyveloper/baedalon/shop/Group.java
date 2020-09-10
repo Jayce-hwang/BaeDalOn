@@ -69,6 +69,17 @@ public class Group {
         targetGroup.sortOrder = originSortOrder;
     }
 
+    public void changeSortOrder(List<Group> groupList) {
+        int size = groupList.size();
+
+        if(size== 0) {
+            this.sortOrder = 1;
+        } else {
+            this.sortOrder = groupList.get(size -1)
+                    .getSortOrder();
+        }
+    }
+
     public void changeGroupStatus(GroupStatus status){
         this.status = status;
     }

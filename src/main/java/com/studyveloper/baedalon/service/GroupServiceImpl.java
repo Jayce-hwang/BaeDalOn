@@ -24,22 +24,12 @@ public class GroupServiceImpl implements GroupService{
     private final GroupRepository groupRepository;
     private final EntityManager entityManager;
 
+
     @Override
     public Long createGroup(@NonNull GroupCreateDto groupCreateDto, @NonNull Long shopId) {
-        //첫번째 Group이 들어가실 시에는 아무 Group도 등록되어있지 않기 때문에 집단함수의 결과값 행이 없음
-        // 해결책 1. Null값을 리턴받으면 sortOrder를 1로 세팅한다.
-        // 해결책 2. 먼저 sortOrder값을 디폴트값으로 정해서 save를 한 후에 영속 상태인 group의 sortOrder를 변경한다.
-        // 해결책 2의 문제 => save후에 한번 더 값이 바뀌기 때문에 더티체킹을 통한 db반영이 한번더 이루어져야함
-        // 어떻게 할지?
-        Long sortOrder = new Long(1);
+       List<Group> groupList = groupRepository.findByShopIdOrderBySortOrderDesc(shopId);
 
-        try {
-            sortOrder = groupRepository.findGroupCountByShopId(shopId) + 1;
-        } catch (NullPointerException exception){
-            exception.printStackTrace();
-        }
-
-        //shopId로 Shop을 가져오던가 or Shop에서 그룹을 추가하던가 둘중하나는 해야함
+        //TODO: ShopRepository를 에서 findById를 통해 shop 엔티티를 가져오도록 변경 필요
         Shop shop = entityManager.find(Shop.class, shopId);
 
         Group group = Group.builder()
@@ -47,6 +37,8 @@ public class GroupServiceImpl implements GroupService{
                 .description(groupCreateDto.getDescription())
                 .shop(shop)
                 .build();
+
+        group.changeSortOrder(groupList);
 
         group = groupRepository.save(group);
 
