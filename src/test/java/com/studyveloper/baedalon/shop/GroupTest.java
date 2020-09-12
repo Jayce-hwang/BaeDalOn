@@ -126,4 +126,18 @@ class GroupTest {
         assertThat(targetGroup)
                 .hasFieldOrPropertyWithValue("sortOrder", originGroupSortOrder);
     }
+
+    @Test
+    @DisplayName("deleteGroup 성공 테스트")
+    public void testDeleteGroup_success() {
+        List<Group> groups = groupRepository.findAll();
+
+        groupService.deleteGroup(groups.get(0).getId());
+        groupService.deleteGroup(groups.get(1).getId());
+
+        List<Group> result = groupRepository.findAll();
+
+        assertThat(result.size())
+                .isEqualTo(groups.size() - 2);
+    }
 }
