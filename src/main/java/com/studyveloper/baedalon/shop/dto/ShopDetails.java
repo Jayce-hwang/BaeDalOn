@@ -8,14 +8,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 public class ShopDetails {
     private Long id;
-    private Owner owner;
+    private Long ownerId;
     private String name;
     private String address;
     private String phone;
@@ -24,11 +20,24 @@ public class ShopDetails {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    @Builder
+    public ShopDetails(Long id, Long ownerId, String name, String address, String phone, ShopStatus status, String description, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.status = status;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ShopDetails that = (ShopDetails) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        ShopDetails that = (ShopDetails) obj;
         return Objects.equals(id, that.id);
     }
 }
