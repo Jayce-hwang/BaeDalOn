@@ -254,6 +254,22 @@ class GroupTest {
     }
 
     @Test
+    @DisplayName("findGroup 실패 테스트 파라미터에 null값이 존재할 경우")
+    public void testFindGroup_fail_nullParameter() {
+        assertThatThrownBy(() -> {
+            groupService.findGroup(null); })
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("findGroup 실패 테스트 존재하지 않는 Group을 제공할 경우")
+    public void testFindGroup_fail_not_exist_Group() {
+        assertThatThrownBy(() -> {
+            groupService.findGroup((long)-1); })
+                .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
     @DisplayName("findGroups 성공 테스트")
     public void testFindGroups_success() {
         List<Shop> shops = shopRepository.findAll();
