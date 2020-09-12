@@ -92,8 +92,10 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 실패 테스트 파라미터에 null값이 존재할 경우")
     public void testCreateGroup_fail_nullParameter() {
+        List<Shop> shops = shopRepository.findAll();
+
         assertThatThrownBy(() -> {
-            groupService.createGroup(null, (long)1); })
+            groupService.createGroup(null, shops.get(0).getId()); })
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -124,6 +126,16 @@ class GroupTest {
                 .hasFieldOrPropertyWithValue("name", groupEditDto.getName())
                 .hasFieldOrPropertyWithValue("description", groupEditDto.getDescription())
                 .hasFieldOrPropertyWithValue("status", groupEditDto.getStatus());
+    }
+
+    @Test
+    @DisplayName("editGrop 실패 테스트 파라미터에 null값을 제공할 경우")
+    public void testEdiGroup_fail_nullParameter() {
+        List<Group> groups = groupRepository.findAll();
+
+        assertThatThrownBy(() -> {
+            groupService.editGroup(groups.get(0).getId(), null); })
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
