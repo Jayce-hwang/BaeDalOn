@@ -186,6 +186,14 @@ class GroupTest {
     }
 
     @Test
+    @DisplayName("swapGroupOrder 실패 테스트 파라미터에 null값이 있을 경우")
+    public void testSwapGroupOrder_fail_nullParameter() {
+        assertThatThrownBy(() -> {
+            groupService.swapGroupOrder(null, null); })
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
     @DisplayName("swapGroupOrder 실패 테스트 존재하지 않는 Group의 id를 제공할 경우")
     public void testSwapGroupOrder_fail_not_exist_Group() {
         List<Shop> shops = shopRepository.findAll();
@@ -213,10 +221,18 @@ class GroupTest {
 
     @Test
     @DisplayName("deleteGroup 실패 테스트 존재하지 않는 group을 제공할 경우")
-    public void testDeleteGroup_fail() {
+    public void testDeleteGroup_fail_not_exist_group() {
         assertThatThrownBy(() -> {
             groupService.deleteGroup((long)-1); })
                 .isInstanceOf(EmptyResultDataAccessException.class);
+    }
+
+    @Test
+    @DisplayName("deleteGroup 실패 테스트 파라미터에 null값이 있을 경우")
+    public void testDeleteGroup_fail_nullParameter() {
+        assertThatThrownBy(() -> {
+            groupService.deleteGroup(null); })
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
