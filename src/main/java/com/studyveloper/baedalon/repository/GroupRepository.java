@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    Optional<Group> findByName(String name);
     List<Group> findByShopId(long shopId);
-    List<Group> findByShopIdOrderBySortOrderDesc(long shopId);
+    List<Group> findByShopIdOrderBySortOrderAsc(long shopId);
 }

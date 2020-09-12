@@ -27,7 +27,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Long createGroup(@NonNull GroupCreateDto groupCreateDto, @NonNull Long shopId) {
-       List<Group> groupList = groupRepository.findByShopIdOrderBySortOrderDesc(shopId);
+       List<Group> groupList = groupRepository.findByShopIdOrderBySortOrderAsc(shopId);
 
         //TODO: ShopRepository를 에서 findById를 통해 shop 엔티티를 가져오도록 변경 필요
         Shop shop = entityManager.find(Shop.class, shopId);
@@ -60,6 +60,8 @@ public class GroupServiceImpl implements GroupService{
     public void swapGroupOrder(@NonNull Long groupId, @NonNull Long targetGroupId) {
         Group group = groupRepository.findById(groupId).orElseThrow(EntityNotFoundException::new);
         Group targetGroup = groupRepository.findById(targetGroupId).orElseThrow(EntityNotFoundException::new);
+
+        //TODO:: 같은 샵의 그룹이 아닐 경우에 대한 예외처리 추가 필
 
        group.swapSortOrder(targetGroup);
     }

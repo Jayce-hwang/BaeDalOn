@@ -1,6 +1,7 @@
 package com.studyveloper.baedalon.shop;
 
 import com.studyveloper.baedalon.dto.GroupCreateDto;
+import com.studyveloper.baedalon.dto.GroupEditDto;
 
 import java.util.Random;
 
@@ -29,5 +30,16 @@ public class GroupTestFactory {
         groupCreateDto.setDescription("description" + value);
 
         return groupCreateDto;
+    }
+
+    public static GroupEditDto getGroupEditDto() {
+        long value = random.nextLong();
+
+        GroupEditDto groupEditDto = new GroupEditDto();
+        groupEditDto.setName("editedGroup" + value);
+        groupEditDto.setStatus(GroupStatus.HIDDEN);
+        groupEditDto.setDescription("editedDescription" + value);
+
+        return groupEditDto;
     }
 }
