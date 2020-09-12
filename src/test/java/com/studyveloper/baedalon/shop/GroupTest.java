@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -208,6 +209,14 @@ class GroupTest {
 
         assertThat(result.size())
                 .isEqualTo(groups.size() - 2);
+    }
+
+    @Test
+    @DisplayName("deleteGroup 실패 테스트 존재하지 않는 group을 제공할 경우")
+    public void testDeleteGroup_fail() {
+        assertThatThrownBy(() -> {
+            groupService.deleteGroup((long)-1); })
+                .isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @Test
