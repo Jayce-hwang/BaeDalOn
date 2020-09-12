@@ -159,4 +159,16 @@ class GroupTest {
                 .hasFieldOrPropertyWithValue("sortOrder", group.getSortOrder())
                 .hasFieldOrPropertyWithValue("status", group.getStatus());
     }
+
+    @Test
+    @DisplayName("findGroups 성공 테스트")
+    public void testFindGroups_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+
+        List<GroupDetails> groupDetails = groupService.findGroups(shops.get(0).getId());
+
+        assertThat(groupDetails.size())
+                .isEqualTo(groups.size());
+    }
 }
