@@ -280,4 +280,21 @@ class GroupTest {
         assertThat(groupDetails.size())
                 .isEqualTo(groups.size());
     }
+
+    @Test
+    @DisplayName("findGroups 성공 테스트 shop이 존재하지 않을경우")
+    public void testFindGroups_success_not_exist_shop() {
+        List<GroupDetails> groupDetails = groupService.findGroups((long)-1);
+
+        assertThat(groupDetails.size())
+                .isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("findGroups 실패 테스트 파라미터에 null을 제공할 경우")
+    public void testFindGroups_fail_not_exist_Shop() {
+        assertThatThrownBy(() -> {
+            groupService.findGroup(null); })
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
