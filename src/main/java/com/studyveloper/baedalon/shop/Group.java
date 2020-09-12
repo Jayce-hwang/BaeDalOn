@@ -63,6 +63,11 @@ public class Group {
     }
 
     public void swapSortOrder(Group targetGroup) {
+        if(!shop.equals(targetGroup.shop)) {
+            //TODO:: 사용자 정의 RuntimeException 만들기
+            throw new RuntimeException();
+        }
+
         long originSortOrder = this.sortOrder;
 
         this.sortOrder = targetGroup.sortOrder;

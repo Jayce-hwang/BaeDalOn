@@ -170,6 +170,33 @@ class GroupTest {
     }
 
     @Test
+    @DisplayName("swapGroupOrder 실패 테스트 서로 다른 Shop에 속한 Group일 경우")
+    public void testSwapGroupOrder_fail_belong_different_shop() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        List<Group> targetGroups = groupRepository.findByShopId(shops.get(1).getId());
+
+        Group group = groups.get(0);
+        Group targetGroup = targetGroups.get(0);
+
+        assertThatThrownBy(() -> {
+            groupService.swapGroupOrder(group.getId(), targetGroup.getId()); })
+                .isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    @DisplayName("swapGroupOrder 실패 테스트 존재하지 않는 Group의 id를 제공할 경우")
+    public void testSwapGroupOrder_fail_not_exist_Group() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        Group group = groups.get(0);
+
+        assertThatThrownBy(() -> {
+            groupService.swapGroupOrder(group.getId(), (long)-1); })
+                .isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
     @DisplayName("deleteGroup 성공 테스트")
     public void testDeleteGroup_success() {
         List<Group> groups = groupRepository.findAll();

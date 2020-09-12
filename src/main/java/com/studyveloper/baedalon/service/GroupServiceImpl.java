@@ -62,7 +62,7 @@ public class GroupServiceImpl implements GroupService{
 
         //TODO:: 같은 샵의 그룹이 아닐 경우에 대한 예외처리 추가 필
 
-       group.swapSortOrder(targetGroup);
+        group.swapSortOrder(targetGroup);
     }
 
     @Override
