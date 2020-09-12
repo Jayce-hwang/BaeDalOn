@@ -93,7 +93,7 @@ class GroupTest {
         List<Group> result = groupRepository.findAll();
         Group testGroup = result.get(0);
 
-        GroupEditDto groupEditDto = GroupTestFactory.getGroupEditDto();
+        GroupEditDto  = GroupTestFactory.getGroupEditDto();
         groupService.editGroup(testGroup.getId(), groupEditDto);
 
         Group group = groupRepository.findById(testGroup.getId())
