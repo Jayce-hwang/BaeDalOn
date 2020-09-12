@@ -1,4 +1,4 @@
-package com.studyveloper.baedalon;
+package com.studyveloper.baedalon.shop;
 
 import com.studyveloper.baedalon.builder.ShopBuilder;
 import com.studyveloper.baedalon.repository.OwnerRepository;
