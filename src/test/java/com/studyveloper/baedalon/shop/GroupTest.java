@@ -94,11 +94,18 @@ class GroupTest {
     public void testCreateGroup_fail_nullParameter() {
         assertThatThrownBy(() -> {
             groupService.createGroup(null, (long)1); })
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("@NonNull");
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("createGroup 실패 테스트 존재하지 않는 shopId를 파라미터로 제공할 경우")
+    public void testCreateGroup_fail_shopId_type_missmatch() {
+        GroupCreateDto groupCreateDto = GroupTestFactory.getGroupCreateDto();
 
+        assertThatThrownBy(() -> {
+            groupService.createGroup(groupCreateDto, (long)3); })
+                .isInstanceOf(EntityNotFoundException.class);
+    }
 
     @Test
     @DisplayName("editGroup 성공 테스트")

@@ -27,9 +27,9 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public Long createGroup(@NonNull GroupCreateDto groupCreateDto, @NonNull Long shopId) {
-       List<Group> groupList = groupRepository.findByShopIdOrderBySortOrderAsc(shopId);
-
         Shop shop = shopRepository.findById(shopId).orElseThrow(EntityNotFoundException::new);
+
+        List<Group> groupList = groupRepository.findByShopIdOrderBySortOrderAsc(shopId);
 
         Group group = Group.builder()
                 .name(groupCreateDto.getName())
