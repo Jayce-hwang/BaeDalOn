@@ -41,8 +41,6 @@ class GroupTest {
         shopRepository.save(shop1);
         shopRepository.save(shop2);
 
-        System.out.println("ShopId = " + shop1.getId());
-
         Group group1 = GroupTestFactory.getGroup(shop1);
         Group group2 = GroupTestFactory.getGroup(shop1);
         Group group3 = GroupTestFactory.getGroup(shop2);
@@ -78,15 +76,29 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 성공 테스트 (n번째 값 추가시)")
     public void testCreateGroup_success_multipleGroupCreate() {
+        Shop shop = new Shop();
+        shopRepository.save(shop);
+
         GroupCreateDto groupCreateDto = GroupTestFactory.getGroupCreateDto();
 
-        long id = groupService.createGroup(groupCreateDto, (long)1);
+        long id = groupService.createGroup(groupCreateDto, shop.getId());
 
         Group group = groupRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         assertThat(group)
                 .hasFieldOrPropertyWithValue("sortOrder", (long)3);
     }
+
+    @Test
+    @DisplayName("createGroup 실패 테스트 파라미터에 null값이 존재할 경우")
+    public void testCreateGroup_fail_nullParameter() {
+        assertThatThrownBy(() -> {
+            groupService.createGroup(null, (long)1); })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("@NonNull");
+    }
+
+
 
     @Test
     @DisplayName("editGroup 성공 테스트")
