@@ -27,6 +27,8 @@ class GroupTest {
     GroupService groupService;
     @Autowired
     GroupRepository groupRepository;
+    @Autowired
+    ShopRepository shopRepository;
     @PersistenceContext
     EntityManager entityManager;
 
@@ -35,8 +37,8 @@ class GroupTest {
         Shop shop1 = new Shop();
         Shop shop2 = new Shop();
 
-        entityManager.persist(shop1);
-        entityManager.persist(shop2);
+        shopRepository.save(shop1);
+        shopRepository.save(shop2);
 
         System.out.println("ShopId = " + shop1.getId());
 
@@ -59,9 +61,8 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 성공 테스트 (첫번째 값 추가시)")
     public void testCreateGroup_success_firstGroupCreate() {
-        // TODO: Shop팩토리를 통해 shop 객체를 받아오는 작업으로 전환 필요
         Shop shop = new Shop();
-        entityManager.persist(shop);
+        shopRepository.save(shop);
 
         GroupCreateDto groupCreateDto = GroupTestFactory.getGroupCreateDto();
 
@@ -90,10 +91,10 @@ class GroupTest {
     @DisplayName("editGroup 성공 테스트")
     public void testEditGroup_success() {
         //TODO:: 테스트 방식 점검 필요
-        List<Group> result = groupRepository.findAll();
-        Group testGroup = result.get(0);
+        List<Group> groups = groupRepository.findAll();
+        Group testGroup = groups.get(0);
 
-        GroupEditDto  = GroupTestFactory.getGroupEditDto();
+        GroupEditDto groupEditDto = GroupTestFactory.getGroupEditDto();
         groupService.editGroup(testGroup.getId(), groupEditDto);
 
         Group group = groupRepository.findById(testGroup.getId())
@@ -108,7 +109,21 @@ class GroupTest {
     @Test
     @DisplayName("swapGroupOrder 성공 테스트")
     public void testSwapGroupOrder_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
 
-        List<Group> result = groupRepository.findByShopId();
+        Group group = groups.get(0);
+        Group targetGroup = groups.get(1);
+
+        long originGroupSortOrder = group.getSortOrder();
+        long targetGroupSortOrder = targetGroup.getSortOrder();
+
+        groupService.swapGroupOrder(group.getId(), targetGroup.getId());
+
+        assertThat(group)
+                .hasFieldOrPropertyWithValue("sortOrder", targetGroupSortOrder);
+
+        assertThat(targetGroup)
+                .hasFieldOrPropertyWithValue("sortOrder", originGroupSortOrder);
     }
 }
