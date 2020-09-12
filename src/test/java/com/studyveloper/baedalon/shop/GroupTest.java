@@ -1,6 +1,7 @@
 package com.studyveloper.baedalon.shop;
 
 import com.studyveloper.baedalon.dto.GroupCreateDto;
+import com.studyveloper.baedalon.dto.GroupDetails;
 import com.studyveloper.baedalon.dto.GroupEditDto;
 import com.studyveloper.baedalon.repository.GroupRepository;
 import com.studyveloper.baedalon.service.GroupService;
@@ -139,5 +140,23 @@ class GroupTest {
 
         assertThat(result.size())
                 .isEqualTo(groups.size() - 2);
+    }
+
+    @Test
+    @DisplayName("findGroup 성공 테스트")
+    public void testFindGroup_success() {
+        List<Shop> shops = shopRepository.findAll();
+
+        Group group = GroupTestFactory.getGroup(shops.get(0));
+        groupRepository.save(group);
+
+        GroupDetails findGroup = groupService.findGroup(group.getId());
+
+        assertThat(findGroup)
+                .hasFieldOrPropertyWithValue("id", group.getId())
+                .hasFieldOrPropertyWithValue("name", group.getName())
+                .hasFieldOrPropertyWithValue("description", group.getDescription())
+                .hasFieldOrPropertyWithValue("sortOrder", group.getSortOrder())
+                .hasFieldOrPropertyWithValue("status", group.getStatus());
     }
 }
