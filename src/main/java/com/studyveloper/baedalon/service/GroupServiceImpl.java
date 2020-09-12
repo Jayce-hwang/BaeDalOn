@@ -7,6 +7,7 @@ import com.studyveloper.baedalon.repository.GroupRepository;
 import com.studyveloper.baedalon.shop.Group;
 import com.studyveloper.baedalon.shop.GroupStatus;
 import com.studyveloper.baedalon.shop.Shop;
+import com.studyveloper.baedalon.shop.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService{
     private final GroupRepository groupRepository;
-    private final EntityManager entityManager;
-
+    private final ShopRepository shopRepository;
 
     @Override
     public Long createGroup(@NonNull GroupCreateDto groupCreateDto, @NonNull Long shopId) {
        List<Group> groupList = groupRepository.findByShopIdOrderBySortOrderAsc(shopId);
 
-        //TODO: ShopRepository를 에서 findById를 통해 shop 엔티티를 가져오도록 변경 필요
-        Shop shop = entityManager.find(Shop.class, shopId);
+        Shop shop = shopRepository.findById(shopId).orElseThrow(EntityNotFoundException::new);
 
         Group group = Group.builder()
                 .name(groupCreateDto.getName())
