@@ -13,10 +13,8 @@ import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "SHOPS")
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Builder(access = AccessLevel.PUBLIC)
 public class Shop {
 
     @Id @GeneratedValue
@@ -51,6 +49,21 @@ public class Shop {
     @UpdateTimestamp
     private LocalDateTime modifiedAt;
 
+
+    @Builder
+    public Shop(Long id, Owner owner, String name, String address, String phone, ShopStatus status, String description, LocalDateTime createdAt, LocalDateTime modifiedAt){
+        this.id = id;
+        this.owner = owner;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.status = status;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
+
+
     public void open(){
         this.status = ShopStatus.OPEN;
     }
@@ -62,5 +75,6 @@ public class Shop {
         this.address = address;
         this.phone = phone;
         this.description = description;
+        this.status = ShopStatus.CLOSE;
     }
 }
