@@ -70,7 +70,10 @@ public class CustomerService {
 		
 		customer.inactivate();
 	}
-
+	
+	/*
+	 * 고객 찾기
+	 */
 	public CustomerDetails findCustomer(@NonNull Long id) {
 		Customer customer = customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 		
@@ -90,6 +93,9 @@ public class CustomerService {
 //	  	SearchCondition이 머야
 //	  }
 	
+	/*
+	 * 전화번호 중복 체크
+	 */
 	public void checkDuplicatedPhone(String phone) {
 		boolean isDuplicated = customerRepository.existsByPhoneAndStatus(phone, CustomerStatus.ACTIVATED);
 		
@@ -98,6 +104,9 @@ public class CustomerService {
 		}
 	}
 	
+	/*
+	 * 로그인 아이디 중복 체크
+	 */
 	public void checkDuplicatedLoginId(String loginId) {
 		boolean isDuplicated = customerRepository.existsByLoginIdAndStatus(loginId, CustomerStatus.ACTIVATED);
 		
@@ -106,21 +115,33 @@ public class CustomerService {
 		}
 	}
 	
+	/*
+	 * 비밀번호 인증
+	 */
 	public void validatePassword(String loginId, String password) {
 		Customer customer = getActiveCustomer(loginId);
 		validatePassword(customer, password);
 	}
 	
+	/*
+	 * 비밀번호 인증
+	 */
 	private void validatePassword(Customer customer, String password) {
 		if(!passwordEncoder.matches(password, customer.getPassword())) {
 			throw new RuntimeException("비밀번호 틀림");
 		}
 	}
 	
+	/*
+	 * 로그인 아이디로 활성화된 고객 찾기
+	 */
 	private Customer getActiveCustomer(String loginId) {
 		return customerRepository.findByLoginIdAndStatus(loginId, CustomerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
 	}
 	
+	/*
+	 * 아이디로 활성화된 고객 찾기
+	 */
 	private Customer getActiveCustomer(Long id) {
 		return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
