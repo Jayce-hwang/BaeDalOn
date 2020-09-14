@@ -68,7 +68,10 @@ public class OwnerService {
 		
 		owner.inactivate();
 	}
-
+	
+	/*
+	 * 업주 찾기
+	 */
 	public OwnerDetails findOwner(@NonNull Long id) {
 		Owner owner = ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 		
@@ -83,6 +86,9 @@ public class OwnerService {
 		return findResult;
 	}
 	
+	/*
+	 * 전화번호 중복 체크
+	 */
 	public void checkDuplicatedPhone(String phone) {
 		boolean isDuplicated = ownerRepository.existsByPhoneAndStatus(phone, OwnerStatus.ACTIVATED);
 		
@@ -91,6 +97,9 @@ public class OwnerService {
 		}
 	}
 	
+	/*
+	 * 이메일 중복 체크
+	 */
 	public void checkDuplicatedEmail(String email) {
 		boolean isDuplicated = ownerRepository.existsByEmailAndStatus(email, OwnerStatus.ACTIVATED);
 		
@@ -99,21 +108,33 @@ public class OwnerService {
 		}
 	}
 	
+	/*
+	 * 비밀번호 인증
+	 */
 	public void validatePassword(String email, String password) {
 		Owner owner = getActiveOwner(email);
 		validatePassword(owner, password);
 	}
 	
+	/*
+	 * 비밀번호 인증
+	 */
 	private void validatePassword(Owner owner, String password) {
 		if(!passwordEncoder.matches(password, owner.getPassword())) {
 			throw new RuntimeException("비밀번호 틀림");
 		}
 	}
 	
+	/*
+	 * 이메일로 활성화된 업주 찾기
+	 */
 	private Owner getActiveOwner(String email) {
 		return ownerRepository.findByEmailAndStatus(email, OwnerStatus.ACTIVATED).orElseThrow(EntityNotFoundException::new);
 	}
 	
+	/*
+	 * 아이디로 활성화된 업주 찾기
+	 */
 	private Owner getActiveOwner(Long id) {
 		return ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
