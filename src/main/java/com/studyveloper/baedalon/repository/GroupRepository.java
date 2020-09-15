@@ -1,6 +1,6 @@
 package com.studyveloper.baedalon.repository;
 
-import com.studyveloper.baedalon.shop.Group;
+import com.studyveloper.baedalon.group.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

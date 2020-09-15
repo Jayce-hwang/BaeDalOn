@@ -8,6 +8,7 @@ import com.studyveloper.baedalon.shop.dto.ShopCreateDTO;
 import com.studyveloper.baedalon.shop.dto.ShopDetails;
 import com.studyveloper.baedalon.shop.dto.ShopEditDTO;
 import com.studyveloper.baedalon.user.Owner;
+import com.studyveloper.baedalon.user.OwnerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
