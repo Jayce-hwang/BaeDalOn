@@ -1,4 +1,4 @@
-package com.studyveloper.baedalon.dto;
+package com.studyveloper.baedalon.group.dto;
 
 import com.studyveloper.baedalon.shop.GroupStatus;
 import lombok.Data;

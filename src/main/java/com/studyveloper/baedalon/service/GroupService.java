@@ -1,8 +1,8 @@
 package com.studyveloper.baedalon.service;
 
-import com.studyveloper.baedalon.dto.GroupCreateDto;
-import com.studyveloper.baedalon.dto.GroupDetails;
-import com.studyveloper.baedalon.dto.GroupEditDto;
+import com.studyveloper.baedalon.group.dto.GroupCreateDto;
+import com.studyveloper.baedalon.group.dto.GroupDetails;
+import com.studyveloper.baedalon.group.dto.GroupEditDto;
 
 import java.util.List;
 

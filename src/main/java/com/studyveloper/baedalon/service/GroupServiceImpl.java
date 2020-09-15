@@ -1,11 +1,10 @@
 package com.studyveloper.baedalon.service;
 
-import com.studyveloper.baedalon.dto.GroupCreateDto;
-import com.studyveloper.baedalon.dto.GroupDetails;
-import com.studyveloper.baedalon.dto.GroupEditDto;
+import com.studyveloper.baedalon.group.dto.GroupCreateDto;
+import com.studyveloper.baedalon.group.dto.GroupDetails;
+import com.studyveloper.baedalon.group.dto.GroupEditDto;
 import com.studyveloper.baedalon.repository.GroupRepository;
 import com.studyveloper.baedalon.shop.Group;
-import com.studyveloper.baedalon.shop.GroupStatus;
 import com.studyveloper.baedalon.shop.Shop;
 import com.studyveloper.baedalon.shop.ShopRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,10 @@
 package com.studyveloper.baedalon.shop;
 
-import com.studyveloper.baedalon.dto.GroupCreateDto;
-import com.studyveloper.baedalon.dto.GroupDetails;
-import com.studyveloper.baedalon.dto.GroupEditDto;
+import com.studyveloper.baedalon.group.dto.GroupCreateDto;
+import com.studyveloper.baedalon.group.dto.GroupDetails;
+import com.studyveloper.baedalon.group.dto.GroupEditDto;
 import com.studyveloper.baedalon.repository.GroupRepository;
 import com.studyveloper.baedalon.service.GroupService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
