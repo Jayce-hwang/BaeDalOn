@@ -1,4 +1,4 @@
-package com.studyveloper.baedalon.service;
+package com.studyveloper.baedalon.group;
 
 import com.studyveloper.baedalon.group.dto.GroupCreateDto;
 import com.studyveloper.baedalon.group.dto.GroupDetails;

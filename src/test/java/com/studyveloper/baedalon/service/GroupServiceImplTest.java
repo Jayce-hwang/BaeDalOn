@@ -1,9 +1,10 @@
 package com.studyveloper.baedalon.service;
 
+import com.studyveloper.baedalon.group.GroupService;
 import com.studyveloper.baedalon.group.dto.GroupCreateDto;
 import com.studyveloper.baedalon.group.dto.GroupDetails;
 import com.studyveloper.baedalon.group.dto.GroupEditDto;
-import com.studyveloper.baedalon.repository.GroupRepository;
+import com.studyveloper.baedalon.group.GroupRepository;
 import com.studyveloper.baedalon.shop.Group;
 import com.studyveloper.baedalon.shop.GroupStatus;
 import com.studyveloper.baedalon.shop.Shop;
@@ -22,7 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Transactional
 class GroupServiceImplTest {
-    @Autowired GroupService groupService;
+    @Autowired
+    GroupService groupService;
     @Autowired GroupRepository groupRepository;
     @PersistenceContext EntityManager entityManager;
 
