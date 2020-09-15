@@ -1,5 +1,7 @@
-package com.studyveloper.baedalon.shop;
+package com.studyveloper.baedalon.item;
 
+import com.studyveloper.baedalon.group.Group;
+import com.studyveloper.baedalon.shop.Shop;
 import lombok.*;
 
 import javax.persistence.*;

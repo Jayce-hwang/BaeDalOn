@@ -1,10 +1,14 @@
 package com.studyveloper.baedalon.group;
 
+import com.studyveloper.baedalon.builder.GroupBuilder;
+import com.studyveloper.baedalon.builder.ShopBuilder;
 import com.studyveloper.baedalon.group.dto.GroupCreateDto;
 import com.studyveloper.baedalon.group.dto.GroupDetails;
 import com.studyveloper.baedalon.group.dto.GroupEditDto;
 import com.studyveloper.baedalon.shop.Shop;
 import com.studyveloper.baedalon.shop.ShopRepository;
+import com.studyveloper.baedalon.shop.ShopService;
+import com.studyveloper.baedalon.shop.dto.ShopCreateDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +31,8 @@ class GroupTest {
     @Autowired
     GroupService groupService;
     @Autowired
+    ShopService shopService;
+    @Autowired
     GroupRepository groupRepository;
     @Autowired
     ShopRepository shopRepository;
@@ -35,16 +41,19 @@ class GroupTest {
 
     @BeforeEach
     public void setUp() {
-        Shop shop1 = new Shop();
-        Shop shop2 = new Shop();
+        ShopCreateDTO shopCreateDTO1 = ShopBuilder.shopCreateDTODummyBuild();
+        ShopCreateDTO shopCreateDTO2 = ShopBuilder.shopCreateDTODummyBuild();
 
-        shopRepository.save(shop1);
-        shopRepository.save(shop2);
+        Long shopId1 = shopService.createShop(shopCreateDTO1);
+        Long shopId2 = shopService.createShop(shopCreateDTO2);
 
-        Group group1 = GroupTestFactory.getGroup(shop1);
-        Group group2 = GroupTestFactory.getGroup(shop1);
-        Group group3 = GroupTestFactory.getGroup(shop2);
-        Group group4 = GroupTestFactory.getGroup(shop2);
+        Shop shop1 = shopRepository.findById(shopId1).get();
+        Shop shop2 = shopRepository.findById(shopId2).get();
+
+        Group group1 = GroupBuilder.getGroup(shop1);
+        Group group2 = GroupBuilder.getGroup(shop1);
+        Group group3 = GroupBuilder.getGroup(shop2);
+        Group group4 = GroupBuilder.getGroup(shop2);
 
         entityManager.persist(group1);
         entityManager.persist(group2);
@@ -60,13 +69,12 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 성공 테스트 (첫번째 값 추가시)")
     public void testCreateGroup_success_firstGroupCreate() {
-        Shop shop = new Shop();
-        shopRepository.save(shop);
+        ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTODummyBuild();
+        Long shopId = shopService.createShop(shopCreateDTO);
+        Shop shop = shopRepository.findById(shopId).get();
 
-        GroupCreateDto groupCreateDto = GroupTestFactory.getGroupCreateDto();
-
-        long id = groupService.createGroup(groupCreateDto, shop.getId());
-
+        GroupCreateDto groupCreateDto = GroupBuilder.getGroupCreateDto();
+        Long id = groupService.createGroup(groupCreateDto, shop.getId());
         Group group = groupRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         assertThat(group)
@@ -76,10 +84,11 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 성공 테스트 (n번째 값 추가시)")
     public void testCreateGroup_success_multipleGroupCreate() {
-        Shop shop = new Shop();
-        shopRepository.save(shop);
+        ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTODummyBuild();
+        Long shopId = shopService.createShop(shopCreateDTO);
+        Shop shop = shopRepository.findById(shopId).get();
 
-        GroupCreateDto groupCreateDto = GroupTestFactory.getGroupCreateDto();
+        GroupCreateDto groupCreateDto = GroupBuilder.getGroupCreateDto();
 
         long id = groupService.createGroup(groupCreateDto, shop.getId());
 
@@ -102,7 +111,7 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 실패 테스트 존재하지 않는 shopId를 파라미터로 제공할 경우")
     public void testCreateGroup_fail_not_exist_shop() {
-        GroupCreateDto groupCreateDto = GroupTestFactory.getGroupCreateDto();
+        GroupCreateDto groupCreateDto = GroupBuilder.getGroupCreateDto();
 
         assertThatThrownBy(() -> {
             groupService.createGroup(groupCreateDto, (long)3); })
@@ -116,7 +125,7 @@ class GroupTest {
         List<Group> groups = groupRepository.findAll();
         Group testGroup = groups.get(0);
 
-        GroupEditDto groupEditDto = GroupTestFactory.getGroupEditDto();
+        GroupEditDto groupEditDto = GroupBuilder.getGroupEditDto();
         groupService.editGroup(testGroup.getId(), groupEditDto);
 
         Group group = groupRepository.findById(testGroup.getId())
@@ -141,7 +150,7 @@ class GroupTest {
     @Test
     @DisplayName("editGroup 실패 테스트 존재하지 않는 Group의 id를 파라미터로 제공할 경우")
     public void testEdiGroup_fail_not_exist_group() {
-        GroupEditDto groupEditDto = GroupTestFactory.getGroupEditDto();
+        GroupEditDto groupEditDto = GroupBuilder.getGroupEditDto();
 
         assertThatThrownBy(() -> {
             groupService.editGroup((long)-1, groupEditDto); })
@@ -239,7 +248,7 @@ class GroupTest {
     public void testFindGroup_success() {
         List<Shop> shops = shopRepository.findAll();
 
-        Group group = GroupTestFactory.getGroup(shops.get(0));
+        Group group = GroupBuilder.getGroup(shops.get(0));
         groupRepository.save(group);
 
         GroupDetails findGroup = groupService.findGroup(group.getId());

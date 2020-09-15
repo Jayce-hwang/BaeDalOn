@@ -3,7 +3,7 @@ package com.studyveloper.baedalon.shop;
 import com.studyveloper.baedalon.shop.dto.ShopCreateDTO;
 import com.studyveloper.baedalon.shop.dto.ShopDetails;
 import com.studyveloper.baedalon.shop.dto.ShopEditDTO;
-import com.studyveloper.baedalon.repository.OwnerRepository;
+import com.studyveloper.baedalon.user.OwnerRepository;
 import com.studyveloper.baedalon.user.Owner;
 import com.studyveloper.baedalon.util.Pageable;
 import com.studyveloper.baedalon.util.SearchCondition;

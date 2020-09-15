@@ -1,14 +1,15 @@
-package com.studyveloper.baedalon.group;
+package com.studyveloper.baedalon.builder;
 
+import com.studyveloper.baedalon.group.Group;
 import com.studyveloper.baedalon.group.dto.GroupCreateDto;
 import com.studyveloper.baedalon.group.dto.GroupEditDto;
-import com.studyveloper.baedalon.shop.Group;
+import com.studyveloper.baedalon.group.Group;
 import com.studyveloper.baedalon.shop.GroupStatus;
 import com.studyveloper.baedalon.shop.Shop;
 
 import java.util.Random;
 
-public class GroupTestFactory {
+public class GroupBuilder {
     private static Random random;
 
     static {
