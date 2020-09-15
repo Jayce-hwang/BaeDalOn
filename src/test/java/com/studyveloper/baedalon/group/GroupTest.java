@@ -9,6 +9,10 @@ import com.studyveloper.baedalon.shop.Shop;
 import com.studyveloper.baedalon.shop.ShopRepository;
 import com.studyveloper.baedalon.shop.ShopService;
 import com.studyveloper.baedalon.shop.dto.ShopCreateDTO;
+import com.studyveloper.baedalon.user.Owner;
+import com.studyveloper.baedalon.user.OwnerRepository;
+import com.studyveloper.baedalon.user.OwnerService;
+import com.studyveloper.baedalon.user.dto.OwnerSignUpDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +37,10 @@ class GroupTest {
     @Autowired
     ShopService shopService;
     @Autowired
+    OwnerService ownerService;
+    @Autowired
+    OwnerRepository ownerRepository;
+    @Autowired
     GroupRepository groupRepository;
     @Autowired
     ShopRepository shopRepository;
@@ -41,8 +49,33 @@ class GroupTest {
 
     @BeforeEach
     public void setUp() {
-        ShopCreateDTO shopCreateDTO1 = ShopBuilder.shopCreateDTODummyBuild();
-        ShopCreateDTO shopCreateDTO2 = ShopBuilder.shopCreateDTODummyBuild();
+        OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com",
+                "010111111112",
+                "tester1",
+                "testPwd1");
+
+        Long id = ownerService.signUp(ownerSignUpDTO);
+        Owner owner = ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        OwnerSignUpDTO ownerSignUpDTO2 = new OwnerSignUpDTO("test2@test.com",
+                "01011111111",
+                "tester2",
+                "testPwd2");
+
+        Long id2 = ownerService.signUp(ownerSignUpDTO2);
+        Owner owner2 = ownerRepository.findById(id2).orElseThrow(EntityNotFoundException::new);
+
+        ShopCreateDTO shopCreateDTO1 = ShopBuilder.shopCreateDTOBuild("address",
+                "desc",
+                "name",
+                "phone",
+                owner.getId());
+
+        ShopCreateDTO shopCreateDTO2 = ShopBuilder.shopCreateDTOBuild("address",
+                "desc",
+                "name",
+                "phone",
+                owner2.getId());
 
         Long shopId1 = shopService.createShop(shopCreateDTO1);
         Long shopId2 = shopService.createShop(shopCreateDTO2);
@@ -69,7 +102,19 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 성공 테스트 (첫번째 값 추가시)")
     public void testCreateGroup_success_firstGroupCreate() {
-        ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTODummyBuild();
+        OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test3@test.com",
+                "0101111444",
+                "tester3",
+                "testPwd3");
+
+        Long ownerId = ownerService.signUp(ownerSignUpDTO);
+
+        ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTOBuild("address",
+                "desc",
+                "name",
+                "phone",
+                ownerId);
+
         Long shopId = shopService.createShop(shopCreateDTO);
         Shop shop = shopRepository.findById(shopId).get();
 
@@ -84,9 +129,8 @@ class GroupTest {
     @Test
     @DisplayName("createGroup 성공 테스트 (n번째 값 추가시)")
     public void testCreateGroup_success_multipleGroupCreate() {
-        ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTODummyBuild();
-        Long shopId = shopService.createShop(shopCreateDTO);
-        Shop shop = shopRepository.findById(shopId).get();
+        List<Shop> shops = shopRepository.findAll();
+        Shop shop = shops.get(0);
 
         GroupCreateDto groupCreateDto = GroupBuilder.getGroupCreateDto();
 
@@ -114,7 +158,7 @@ class GroupTest {
         GroupCreateDto groupCreateDto = GroupBuilder.getGroupCreateDto();
 
         assertThatThrownBy(() -> {
-            groupService.createGroup(groupCreateDto, (long)3); })
+            groupService.createGroup(groupCreateDto, (long)-1); })
                 .isInstanceOf(EntityNotFoundException.class);
     }
 

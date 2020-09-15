@@ -1,7 +1,7 @@
 package com.studyveloper.baedalon.shop;
 
 import com.studyveloper.baedalon.builder.ShopBuilder;
-import com.studyveloper.baedalon.repository.OwnerRepository;
+import com.studyveloper.baedalon.user.OwnerRepository;
 import com.studyveloper.baedalon.shop.ShopService;
 import com.studyveloper.baedalon.shop.ShopStatus;
 import com.studyveloper.baedalon.shop.dto.ShopCreateDTO;
@@ -9,6 +9,8 @@ import com.studyveloper.baedalon.shop.dto.ShopDetails;
 import com.studyveloper.baedalon.shop.dto.ShopEditDTO;
 import com.studyveloper.baedalon.user.Owner;
 import com.studyveloper.baedalon.user.OwnerRepository;
+import com.studyveloper.baedalon.user.OwnerService;
+import com.studyveloper.baedalon.user.dto.OwnerSignUpDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.persistence.EntityNotFoundException;
+
 
 @SpringBootTest
 @Transactional
@@ -24,14 +28,18 @@ public class ShopTest {
     @Autowired
     private ShopService shopService;
     @Autowired
+    private OwnerService ownerService;
+    @Autowired
     private OwnerRepository ownerRepository;
 
 
     @DisplayName("가게생성 성공")
     @Test
     public void create_shop_success(){
-        Owner owner = new Owner((long)1);//임시로 생성자 하나 만듬
-        owner = ownerRepository.save(owner);
+        OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+        Long id = ownerService.signUp(ownerSignUpDTO);
+        Owner owner = ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
         ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTODummyBuild();
         Long shopId = shopService.createShop(shopCreateDTO);
         Assertions.assertThat(shopId).isNotNull();
@@ -40,8 +48,10 @@ public class ShopTest {
     @DisplayName("가게생성 업주당 1가게 조건 실패")
     @Test
     public void create_shop_fail(){
-        Owner owner = new Owner((long)1);
-        owner = ownerRepository.save(owner);
+        OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+        Long id = ownerService.signUp(ownerSignUpDTO);
+        Owner owner = ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
         ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTODummyBuild();
         Long shopId = shopService.createShop(shopCreateDTO);
         Assertions.assertThat(shopId).isNotNull();
@@ -53,8 +63,10 @@ public class ShopTest {
     @DisplayName("가게 정보수정 성공")
     @Test
     public void shop_edit_success(){
-        Owner owner = new Owner((long)1);
-        owner = ownerRepository.save(owner);
+        OwnerSignUpDTO ownerSignUpDTO = new OwnerSignUpDTO("test1@test.com", "01011111111", "tester1", "testPwd1");
+        Long id = ownerService.signUp(ownerSignUpDTO);
+        Owner owner = ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
         ShopCreateDTO shopCreateDTO = ShopBuilder.shopCreateDTODummyBuild();
         Long shopId = shopService.createShop(shopCreateDTO);
         Assertions.assertThat(shopId).isNotNull();

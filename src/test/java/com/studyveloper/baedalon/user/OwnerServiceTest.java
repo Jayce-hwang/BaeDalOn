@@ -39,7 +39,7 @@ public class OwnerServiceTest {
 		Long id = ownerService.signUp(ownerSignUpDTO);
 		
 		// Then
-		Owner owner = ownerRepository.findById(id).orElseThrow();
+		Owner owner = ownerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 		
 		assertThat(owner)
 					.isNotNull()

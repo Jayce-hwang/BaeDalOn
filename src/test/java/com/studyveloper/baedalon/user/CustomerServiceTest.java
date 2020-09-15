@@ -39,7 +39,7 @@ public class CustomerServiceTest {
 		Long id = customerService.signUp(customerSignUpDTO);
 		
 		// Then
-		Customer customer = customerRepository.findById(id).orElseThrow();
+		Customer customer = customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 		
 		assertThat(customer)
 					.isNotNull()
