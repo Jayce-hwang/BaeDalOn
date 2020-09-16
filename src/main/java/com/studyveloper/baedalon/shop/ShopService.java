@@ -5,7 +5,6 @@ import com.studyveloper.baedalon.shop.dto.ShopDetails;
 import com.studyveloper.baedalon.shop.dto.ShopEditDTO;
 import com.studyveloper.baedalon.util.Pageable;
 import com.studyveloper.baedalon.util.SearchCondition;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
