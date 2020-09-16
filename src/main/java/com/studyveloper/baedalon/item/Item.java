@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static javax.persistence.FetchType.*;
 
@@ -63,6 +64,15 @@ public class Item {
 
         if(group != null) {changeGroup(group);}
         if(shop != null) {changeShop(shop);}
+    }
+
+    public void changeSortOrder(List<Item> items) {
+        if(items.size() == 0) {
+            this.sortOrder = 1;
+        } else {
+            this.sortOrder = items.get(items.size() -1).sortOrder + 1;
+
+        }
     }
 
     public void changeGroup(Group group) {

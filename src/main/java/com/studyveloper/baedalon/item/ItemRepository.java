@@ -2,6 +2,8 @@ package com.studyveloper.baedalon.item;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {
+import java.util.List;
 
+public interface ItemRepository extends JpaRepository<Item, Long> {
+    List<Item> findByShopIdOrderBySortOrderAsc(Long shopId);
 }
