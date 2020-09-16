@@ -66,6 +66,12 @@ public class Item {
         if(shop != null) {changeShop(shop);}
     }
 
+    public void editItem(String name, int price, String description) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+    }
+
     public void changeSortOrder(List<Item> items) {
         if(items.size() == 0) {
             this.sortOrder = 1;

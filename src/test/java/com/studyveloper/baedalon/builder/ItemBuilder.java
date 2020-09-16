@@ -1,7 +1,9 @@
 package com.studyveloper.baedalon.builder;
 
 import com.studyveloper.baedalon.group.Group;
+import com.studyveloper.baedalon.item.Item;
 import com.studyveloper.baedalon.item.dto.ItemCreateDto;
+import com.studyveloper.baedalon.item.dto.ItemEditDto;
 import com.studyveloper.baedalon.shop.Shop;
 
 import java.util.Random;
@@ -12,6 +14,17 @@ public class ItemBuilder {
     static {
         long seed = System.currentTimeMillis();
         random = new Random(seed);
+    }
+
+    public static Item getItem(Shop shop, Group group) {
+        long value = random.nextLong();
+        return Item.builder()
+                .description("desc" + value)
+                .name("name" + value)
+                .price(1000 + (int)value)
+                .group(group)
+                .shop(shop)
+                .build();
     }
 
     public static ItemCreateDto getItemCreateDto(Shop shop, Group group) {
@@ -25,5 +38,16 @@ public class ItemBuilder {
         itemCreateDto.setShopId(shop.getId());
 
         return itemCreateDto;
+    }
+
+    public static ItemEditDto getItemEditDto() {
+        long value = random.nextLong();
+
+        ItemEditDto itemEditDto = new ItemEditDto();
+        itemEditDto.setName("item-modified" + value);
+        itemEditDto.setDescription("desc-modified" + value);
+        itemEditDto.setPrice(1000 + (int)value);
+
+        return itemEditDto;
     }
 }

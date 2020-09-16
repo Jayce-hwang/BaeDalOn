@@ -10,6 +10,7 @@ import com.studyveloper.baedalon.shop.ShopRepository;
 import com.studyveloper.baedalon.util.SearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +26,12 @@ public class ItemServiceImpl implements ItemService{
     private final ShopRepository shopRepository;
 
     @Override
-    public Long createItem(ItemCreateDto itemCrateDto) {
+    public Long createItem(@NonNull ItemCreateDto itemCrateDto) {
         Shop shop = shopRepository.findById(itemCrateDto.getShopId()).orElseThrow(EntityNotFoundException::new);
         Group group = groupRepository.findById(itemCrateDto.getGroupId()).orElseThrow(EntityNotFoundException::new);
+        //TODO:: shop 과 group이 맞는 연관관계인지 확인하는 로직 필요
 
-        List<Item> items = itemRepository.findByShopIdOrderBySortOrderAsc(shop.getId());
+        List<Item> items = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shop.getId(), group.getId());
 
         Item item = Item.builder()
                 .name(itemCrateDto.getName())
@@ -48,52 +50,58 @@ public class ItemServiceImpl implements ItemService{
     }
 
     @Override
-    public void editItem(Long itemId, ItemEditDto itemEditDto) {
+    public void editItem(@NonNull Long itemId, @NonNull ItemEditDto itemEditDto) {
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        //TODO::해당 수정요청이 올바른 shop, owner, group에서 이루어지는 것인지 확인필
+        item.editItem(
+                itemEditDto.getName(),
+                itemEditDto.getPrice(),
+                itemEditDto.getDescription()
+        );
+    }
+
+    @Override
+    public void deleteItem(@NonNull Long shopId, @NonNull Long groupId, @NonNull Long ownerId, @NonNull Long itemId) {
 
     }
 
     @Override
-    public void deleteItem(Long shopId, Long groupId, Long ownerId, Long itemId) {
+    public void swapItem(@NonNull Long itemId, @NonNull Long targetItemId) {
 
     }
 
     @Override
-    public void swapItem(Long itemId, Long targetItemId) {
+    public void hideItem(@NonNull Long itemId) {
 
     }
 
     @Override
-    public void hideItem(Long itemId) {
+    public void showItem(@NonNull Long itemId) {
 
     }
 
     @Override
-    public void showItem(Long itemId) {
+    public void represent(@NonNull Long itemId) {
 
     }
 
     @Override
-    public void represent(Long itemId) {
+    public void unrepresent(@NonNull Long itemId) {
 
     }
 
     @Override
-    public void unrepresent(Long itemId) {
-
-    }
-
-    @Override
-    public ItemDetails findItem(Long itemId) {
+    public ItemDetails findItem(@NonNull Long itemId) {
         return null;
     }
 
     @Override
-    public List<ItemDetails> findItems(Long groupId) {
+    public List<ItemDetails> findItems(@NonNull Long groupId) {
         return null;
     }
 
     @Override
-    public List<ItemDetails> searchItem(Pageable pageable, SearchCondition searchCondition) {
+    public List<ItemDetails> searchItem(@NonNull Pageable pageable, @NonNull SearchCondition searchCondition) {
         return null;
     }
 }

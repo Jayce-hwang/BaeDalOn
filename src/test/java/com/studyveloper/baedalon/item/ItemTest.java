@@ -6,6 +6,7 @@ import com.studyveloper.baedalon.builder.ShopBuilder;
 import com.studyveloper.baedalon.group.Group;
 import com.studyveloper.baedalon.group.GroupRepository;
 import com.studyveloper.baedalon.item.dto.ItemCreateDto;
+import com.studyveloper.baedalon.item.dto.ItemEditDto;
 import com.studyveloper.baedalon.shop.Shop;
 import com.studyveloper.baedalon.shop.ShopRepository;
 import com.studyveloper.baedalon.shop.ShopService;
@@ -86,6 +87,16 @@ class ItemTest {
 
         group1.chagneSortOrder(1);
         group2.chagneSortOrder(1);
+
+        Item item1 = ItemBuilder.getItem(shop1, group1);
+        Item item2 = ItemBuilder.getItem(shop1, group1);
+        Item item3 = ItemBuilder.getItem(shop2, group2);
+        Item item4 = ItemBuilder.getItem(shop2, group2);
+
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+        itemRepository.save(item4);
     }
 
     @Test
@@ -93,6 +104,8 @@ class ItemTest {
     public void testCreateItem_success_firstItem() {
         List<Shop> shops = shopRepository.findAll();
         List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        List<Item> items
+                = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shops.get(0).getId(), groups.get(0).getId());
 
         ItemCreateDto itemCreateDto = ItemBuilder.getItemCreateDto(shops.get(0), groups.get(0));
 
@@ -104,6 +117,26 @@ class ItemTest {
                 .hasFieldOrPropertyWithValue("name", itemCreateDto.getName())
                 .hasFieldOrPropertyWithValue("price", itemCreateDto.getPrice())
                 .hasFieldOrPropertyWithValue("description", itemCreateDto.getDescription())
-                .hasFieldOrPropertyWithValue("sortOrder", 1);
+                .hasFieldOrPropertyWithValue("sortOrder", items.get(items.size() -1).getSortOrder() + 1);
+    }
+
+    @Test
+    @DisplayName("editItem 성공 테스트")
+    public void testEditItem_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        List<Item> items
+                = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shops.get(0).getId(), groups.get(0).getId());
+
+        ItemEditDto itemEditDto = ItemBuilder.getItemEditDto();
+
+        itemService.editItem(items.get(0).getId(), itemEditDto);
+
+        Item item = itemRepository.findById(items.get(0).getId()).orElseThrow(EntityNotFoundException::new);
+
+        assertThat(item)
+                .hasFieldOrPropertyWithValue("name", itemEditDto.getName())
+                .hasFieldOrPropertyWithValue("description", itemEditDto.getDescription())
+                .hasFieldOrPropertyWithValue("price", itemEditDto.getPrice());
     }
 }
