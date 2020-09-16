@@ -1,9 +1,11 @@
 package com.studyveloper.baedalon.item;
 
 import com.studyveloper.baedalon.builder.GroupBuilder;
+import com.studyveloper.baedalon.builder.ItemBuilder;
 import com.studyveloper.baedalon.builder.ShopBuilder;
 import com.studyveloper.baedalon.group.Group;
 import com.studyveloper.baedalon.group.GroupRepository;
+import com.studyveloper.baedalon.item.dto.ItemCreateDto;
 import com.studyveloper.baedalon.shop.Shop;
 import com.studyveloper.baedalon.shop.ShopRepository;
 import com.studyveloper.baedalon.shop.ShopService;
@@ -12,6 +14,7 @@ import com.studyveloper.baedalon.user.Owner;
 import com.studyveloper.baedalon.user.OwnerRepository;
 import com.studyveloper.baedalon.user.OwnerService;
 import com.studyveloper.baedalon.user.dto.OwnerSignUpDTO;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,13 +27,15 @@ import javax.persistence.EntityNotFoundException;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class ItemServiceImplTest {
-    @Autowired ItemService itemService;
+class ItemTest {
     @Autowired EntityManager entityManager;
+    @Autowired ItemService itemService;
+    @Autowired ItemRepository itemRepository;
     @Autowired OwnerService ownerService;
     @Autowired OwnerRepository ownerRepository;
     @Autowired ShopService shopService;
@@ -84,11 +89,21 @@ class ItemServiceImplTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("createItem 성공 테스트 (첫번째 값 추가시)")
     public void testCreateItem_success_firstItem() {
         List<Shop> shops = shopRepository.findAll();
-        List<Group> gruops = groupRepository.findByShopId(shops.get(0).getId());
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
 
+        ItemCreateDto itemCreateDto = ItemBuilder.getItemCreateDto(shops.get(0), groups.get(0));
 
+        Long id = itemService.createItem(itemCreateDto);
+
+        Item item = itemRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        assertThat(item)
+                .hasFieldOrPropertyWithValue("name", itemCreateDto.getName())
+                .hasFieldOrPropertyWithValue("price", itemCreateDto.getPrice())
+                .hasFieldOrPropertyWithValue("description", itemCreateDto.getDescription())
+                .hasFieldOrPropertyWithValue("sortOrder", 1);
     }
 }
