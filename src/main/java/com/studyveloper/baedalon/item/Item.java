@@ -13,7 +13,6 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Table(name = "ITEMS")
 @Getter
-@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Item {
@@ -53,4 +52,24 @@ public class Item {
 
     @Column(name = "MODIFED_AT")
     private LocalDateTime modifiedAt;
+
+    @Builder
+    public Item(String name, int price, String description, Group group, Shop shop) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.status = ItemStatus.ON_SALE;
+        this.represented = false;
+
+        if(group != null) {changeGroup(group);}
+        if(shop != null) {changeShop(shop);}
+    }
+
+    public void changeGroup(Group group) {
+        this.group = group;
+    }
+
+    public void changeShop(Shop shop) {
+        this.shop = shop;
+    }
 }

@@ -1,5 +1,6 @@
 package com.studyveloper.baedalon.item;
 
+import com.studyveloper.baedalon.group.GroupRepository;
 import com.studyveloper.baedalon.item.dto.ItemCreateDto;
 import com.studyveloper.baedalon.item.dto.ItemDetails;
 import com.studyveloper.baedalon.item.dto.ItemEditDto;
@@ -16,11 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService{
     private final ItemRepository itemRepository;
-
+    private final GroupRepository groupRepository;
 
     @Override
     public Long createItem(ItemCreateDto itemCrateDto) {
-        return null;
+
+
+        itemRepository.save();
     }
 
     @Override
