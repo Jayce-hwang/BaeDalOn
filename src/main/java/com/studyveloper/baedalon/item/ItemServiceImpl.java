@@ -100,7 +100,10 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public ItemDetails findItem(@NonNull Long itemId) {
-        return null;
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        //TODO:: 현재 방식으로는 lazy Fetch이기 때문에 itemDetails 생성시에 쿼리문이 2번(shop과 group id때문에)이
+        // 나가게 되는데 맞는 구조인지 검증필요
+        return new ItemDetails(item);
     }
 
     @Override

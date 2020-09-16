@@ -6,6 +6,7 @@ import com.studyveloper.baedalon.builder.ShopBuilder;
 import com.studyveloper.baedalon.group.Group;
 import com.studyveloper.baedalon.group.GroupRepository;
 import com.studyveloper.baedalon.item.dto.ItemCreateDto;
+import com.studyveloper.baedalon.item.dto.ItemDetails;
 import com.studyveloper.baedalon.item.dto.ItemEditDto;
 import com.studyveloper.baedalon.shop.Shop;
 import com.studyveloper.baedalon.shop.ShopRepository;
@@ -199,5 +200,31 @@ class ItemTest {
         itemService.unrepresent(item.getId());
         item = itemRepository.findById(item.getId()).orElseThrow(EntityNotFoundException::new);
         assertThat(item.isRepresented()).isFalse();
+    }
+
+    @Test
+    @DisplayName("findItem 성공 테스트")
+    public void testFindItem_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        List<Item> items
+                = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shops.get(0).getId(), groups.get(0).getId());
+
+        Item item = items.get(0);
+
+        ItemDetails itemDetails = itemService.findItem(item.getId());
+
+        assertThat(itemDetails)
+                .hasFieldOrPropertyWithValue("id", item.getId())
+                .hasFieldOrPropertyWithValue("name", item.getName())
+                .hasFieldOrPropertyWithValue("price", item.getPrice())
+                .hasFieldOrPropertyWithValue("description", item.getDescription())
+                .hasFieldOrPropertyWithValue("sortOrder", item.getSortOrder())
+                .hasFieldOrPropertyWithValue("status", item.getStatus())
+                .hasFieldOrPropertyWithValue("represented", item.isRepresented())
+                .hasFieldOrPropertyWithValue("groupId", item.getGroup().getId())
+                .hasFieldOrPropertyWithValue("shopId", item.getShop().getId())
+                .hasFieldOrPropertyWithValue("createdAt", item.getCreatedAt())
+                .hasFieldOrPropertyWithValue("modifiedAt", item.getModifiedAt());
     }
 }
