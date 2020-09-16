@@ -185,6 +185,19 @@ class ItemTest {
     @Test
     @DisplayName("represent and unrepresent 성공 테스트")
     public void representAndUnrepresent_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        List<Item> items
+                = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shops.get(0).getId(), groups.get(0).getId());
 
+        Item item = items.get(0);
+
+        itemService.represent(item.getId());
+        item = itemRepository.findById(item.getId()).orElseThrow(EntityNotFoundException::new);
+        assertThat(item.isRepresented()).isTrue();
+
+        itemService.unrepresent(item.getId());
+        item = itemRepository.findById(item.getId()).orElseThrow(EntityNotFoundException::new);
+        assertThat(item.isRepresented()).isFalse();
     }
 }
