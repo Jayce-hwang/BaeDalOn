@@ -32,7 +32,7 @@ public class Item {
     private String description;
 
     @Column(name = "SORT_ORDER")
-    private int sortOrder;
+    private long sortOrder;
 
     @Column(name = "STATUS")
     private ItemStatus status;
@@ -70,6 +70,18 @@ public class Item {
         this.name = name;
         this.price = price;
         this.description = description;
+    }
+
+    public void swapSortOrder(Item targetItem) {
+        if(shop.equals(targetItem.shop) && group.equals(targetItem.group)) {
+            long originSortOrder = this.sortOrder;
+
+            this.sortOrder = targetItem.sortOrder;
+            targetItem.sortOrder = originSortOrder;
+        } else {
+            //TODO::익셉션 정의
+            throw new RuntimeException();
+        }
     }
 
     public void changeSortOrder(List<Item> items) {

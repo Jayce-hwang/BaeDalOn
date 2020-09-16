@@ -62,12 +62,16 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public void deleteItem(@NonNull Long shopId, @NonNull Long groupId, @NonNull Long ownerId, @NonNull Long itemId) {
-
+        //TODO::검증 로직 생각해보기
+        itemRepository.deleteById(itemId);
     }
 
     @Override
     public void swapItem(@NonNull Long itemId, @NonNull Long targetItemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        Item targetItem = itemRepository.findById(targetItemId).orElseThrow(EntityNotFoundException::new);
 
+        item.swapSortOrder(targetItem);
     }
 
     @Override

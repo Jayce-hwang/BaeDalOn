@@ -139,4 +139,28 @@ class ItemTest {
                 .hasFieldOrPropertyWithValue("description", itemEditDto.getDescription())
                 .hasFieldOrPropertyWithValue("price", itemEditDto.getPrice());
     }
+
+    @Test
+    @DisplayName("swapItem 성공 테스트")
+    public void testSwapItem_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        List<Item> items
+                = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shops.get(0).getId(), groups.get(0).getId());
+
+        Item item = items.get(0);
+        Item targetItem = items.get(1);
+
+        long sortOrder = item.getSortOrder();
+        long targetSortOrder = targetItem.getSortOrder();
+
+        itemService.swapItem(item.getId(), targetItem.getId());
+
+        item = itemRepository.findById(item.getId()).orElseThrow(EntityNotFoundException::new);
+        targetItem = itemRepository.findById(targetItem.getId()).orElseThrow(EntityNotFoundException::new);
+
+        assertThat(item.getSortOrder()).isEqualTo(targetSortOrder);
+        assertThat(targetItem.getSortOrder()).isEqualTo(sortOrder);
+
+    }
 }
