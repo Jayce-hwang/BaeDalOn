@@ -161,6 +161,30 @@ class ItemTest {
 
         assertThat(item.getSortOrder()).isEqualTo(targetSortOrder);
         assertThat(targetItem.getSortOrder()).isEqualTo(sortOrder);
+    }
+
+    @Test
+    @DisplayName("hideItem and showItem 성공 테스트")
+    public void testHideAndShowItem_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+        List<Item> items
+                = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shops.get(0).getId(), groups.get(0).getId());
+
+        Item item = items.get(0);
+
+        itemService.hideItem(item.getId());
+        item = itemRepository.findById(item.getId()).orElseThrow(EntityNotFoundException::new);
+        assertThat(item.getStatus()).isEqualTo(ItemStatus.SOLD_OUT);
+
+        itemService.showItem(item.getId());
+        item = itemRepository.findById(item.getId()).orElseThrow(EntityNotFoundException::new);
+        assertThat(item.getStatus()).isEqualTo(ItemStatus.ON_SALE);
+    }
+
+    @Test
+    @DisplayName("represent and unrepresent 성공 테스트")
+    public void representAndUnrepresent_success() {
 
     }
 }

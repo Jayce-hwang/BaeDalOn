@@ -76,22 +76,26 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public void hideItem(@NonNull Long itemId) {
-
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        item.changeStatus(ItemStatus.SOLD_OUT);
     }
 
     @Override
     public void showItem(@NonNull Long itemId) {
-
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        item.changeStatus(ItemStatus.ON_SALE);
     }
 
     @Override
     public void represent(@NonNull Long itemId) {
-
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        item.changeRepresented(true);
     }
 
     @Override
     public void unrepresent(@NonNull Long itemId) {
-
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+        item.changeRepresented(false);
     }
 
     @Override

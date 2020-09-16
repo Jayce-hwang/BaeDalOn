@@ -93,6 +93,14 @@ public class Item {
         }
     }
 
+    public void changeStatus(ItemStatus status) {
+        this.status = status;
+    }
+
+    public void changeRepresented(boolean represented) {
+        this.represented = represented;
+    }
+
     public void changeGroup(Group group) {
         this.group = group;
     }
