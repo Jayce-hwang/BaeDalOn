@@ -23,7 +23,6 @@ public class GroupBuilder {
                 .description("description" + random.nextLong())
                 .shop(shop)
                 .build();
-
     }
 
     public static GroupCreateDto getGroupCreateDto() {
