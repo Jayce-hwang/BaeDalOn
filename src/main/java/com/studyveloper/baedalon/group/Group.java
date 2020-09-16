@@ -1,6 +1,6 @@
 package com.studyveloper.baedalon.group;
 
-import com.studyveloper.baedalon.shop.GroupStatus;
+import com.studyveloper.baedalon.group.GroupStatus;
 import com.studyveloper.baedalon.shop.Shop;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

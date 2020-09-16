@@ -4,7 +4,7 @@ import com.studyveloper.baedalon.group.Group;
 import com.studyveloper.baedalon.group.dto.GroupCreateDto;
 import com.studyveloper.baedalon.group.dto.GroupEditDto;
 import com.studyveloper.baedalon.group.Group;
-import com.studyveloper.baedalon.shop.GroupStatus;
+import com.studyveloper.baedalon.group.GroupStatus;
 import com.studyveloper.baedalon.shop.Shop;
 
 import java.util.Random;
