@@ -5,10 +5,12 @@ import com.studyveloper.baedalon.group.GroupRepository;
 import com.studyveloper.baedalon.item.dto.ItemCreateDto;
 import com.studyveloper.baedalon.item.dto.ItemDetails;
 import com.studyveloper.baedalon.item.dto.ItemEditDto;
+import com.studyveloper.baedalon.item.dto.ItemSearchCondition;
 import com.studyveloper.baedalon.shop.Shop;
 import com.studyveloper.baedalon.shop.ShopRepository;
 import com.studyveloper.baedalon.util.SearchCondition;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,9 @@ public class ItemServiceImpl implements ItemService{
     public Long createItem(@NonNull ItemCreateDto itemCrateDto) {
         Shop shop = shopRepository.findById(itemCrateDto.getShopId()).orElseThrow(EntityNotFoundException::new);
         Group group = groupRepository.findById(itemCrateDto.getGroupId()).orElseThrow(EntityNotFoundException::new);
-        //TODO:: shop 과 group이 맞는 연관관계인지 확인하는 로직 필요
+
+        //TODO::shop과 group의 연관관계가 일치하지 않을 경우 익셉션 정의 필요
+        if(!group.getShop().getId().equals(shop.getId())) { throw new RuntimeException();}
 
         List<Item> items = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shop.getId(), group.getId());
 
@@ -53,7 +57,7 @@ public class ItemServiceImpl implements ItemService{
     @Override
     public void editItem(@NonNull Long itemId, @NonNull ItemEditDto itemEditDto) {
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
-        //TODO::해당 수정요청이 올바른 shop, owner, group에서 이루어지는 것인지 확인필
+        //TODO::해당 수정요청이 올바른 shop, owner, group에서 이루어지는 것인지 확인필요
         item.editItem(
                 itemEditDto.getName(),
                 itemEditDto.getPrice(),
@@ -120,7 +124,7 @@ public class ItemServiceImpl implements ItemService{
     }
 
     @Override
-    public List<ItemDetails> searchItem(@NonNull Pageable pageable, @NonNull SearchCondition searchCondition) {
-        return null;
+    public Page<ItemDetails> searchItem(@NonNull Pageable pageable, @NonNull SearchCondition searchCondition) {
+        return itemRepository.searchItemDetails(pageable, (ItemSearchCondition)searchCondition);
     }
 }

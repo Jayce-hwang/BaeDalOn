@@ -1,5 +1,6 @@
 package com.studyveloper.baedalon.item.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.studyveloper.baedalon.group.Group;
 import com.studyveloper.baedalon.item.Item;
 import com.studyveloper.baedalon.item.ItemStatus;
@@ -23,6 +24,23 @@ public class ItemDetails {
     private Long shopId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    @QueryProjection
+    public ItemDetails(Long id, String name, int price, String description,
+                       long sortOrder, ItemStatus status, boolean represented,
+                       Long groupId, Long shopId, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.sortOrder = sortOrder;
+        this.status = status;
+        this.represented = represented;
+        this.groupId = groupId;
+        this.shopId = shopId;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
 
     public ItemDetails(Item item) {
         this.id = item.getId();

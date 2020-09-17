@@ -243,4 +243,10 @@ class ItemTest {
         assertThat(items.size())
                 .isEqualTo(result.size());
     }
+
+    @Test
+    @DisplayName("searchItem 성공 테스트")
+    public void testSearchItem_success() {
+
+    }
 }

@@ -4,6 +4,7 @@ import com.studyveloper.baedalon.item.dto.ItemCreateDto;
 import com.studyveloper.baedalon.item.dto.ItemDetails;
 import com.studyveloper.baedalon.item.dto.ItemEditDto;
 import com.studyveloper.baedalon.util.SearchCondition;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface ItemService {
     public void unrepresent(Long itemId);
     public ItemDetails findItem(Long itemId);
     public List<ItemDetails> findItems(Long groupId);
-    public List<ItemDetails> searchItem(Pageable pageable, SearchCondition searchCondition);
+    public Page<ItemDetails> searchItem(Pageable pageable, SearchCondition searchCondition);
 }
