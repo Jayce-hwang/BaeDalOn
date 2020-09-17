@@ -227,4 +227,19 @@ class ItemTest {
                 .hasFieldOrPropertyWithValue("createdAt", item.getCreatedAt())
                 .hasFieldOrPropertyWithValue("modifiedAt", item.getModifiedAt());
     }
+
+    @Test
+    @DisplayName("findItems 성공 테스트")
+    public void testFindItems_success() {
+        List<Shop> shops = shopRepository.findAll();
+        List<Group> groups = groupRepository.findByShopId(shops.get(0).getId());
+
+        List<ItemDetails> items = itemService.findItems(groups.get(0).getId());
+
+        List<Item> result
+                = itemRepository.findByShopIdAndGroupIdOrderBySortOrderAsc(shops.get(0).getId(), groups.get(0).getId());
+
+        assertThat(items.size())
+                .isEqualTo(result.size());
+    }
 }

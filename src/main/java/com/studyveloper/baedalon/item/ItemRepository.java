@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByShopIdAndGroupIdOrderBySortOrderAsc(Long shopId, Long groupId);
+    List<Item> findByGroupId(Long groupId);
 }

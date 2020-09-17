@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -108,7 +109,14 @@ public class ItemServiceImpl implements ItemService{
 
     @Override
     public List<ItemDetails> findItems(@NonNull Long groupId) {
-        return null;
+        List<Item> items = itemRepository.findByGroupId(groupId);
+        List<ItemDetails> itemDetailsList = new ArrayList<ItemDetails>();
+
+        for(Item item : items) {
+            itemDetailsList.add(new ItemDetails(item));
+        }
+
+        return itemDetailsList;
     }
 
     @Override
