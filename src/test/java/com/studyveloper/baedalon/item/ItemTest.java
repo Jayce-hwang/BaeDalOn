@@ -1,5 +1,6 @@
 package com.studyveloper.baedalon.item;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.studyveloper.baedalon.builder.GroupBuilder;
 import com.studyveloper.baedalon.builder.ItemBuilder;
 import com.studyveloper.baedalon.builder.ShopBuilder;
