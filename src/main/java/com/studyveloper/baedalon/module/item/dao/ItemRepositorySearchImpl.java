@@ -12,13 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-
 import java.util.List;
 
-import static org.springframework.util.StringUtils.*;
-import static com.studyveloper.baedalon.module.group.QGroup.group;
-import static com.studyveloper.baedalon.module.item.QItem.item;
-import static com.studyveloper.baedalon.module.shop.QShop.shop;
+import static com.studyveloper.baedalon.module.group.domain.QGroup.group;
+import static com.studyveloper.baedalon.module.item.domain.QItem.item;
+import static com.studyveloper.baedalon.module.shop.domain.QShop.shop;
+import static org.springframework.util.StringUtils.hasText;
 
 @RequiredArgsConstructor
 public class ItemRepositorySearchImpl implements ItemRepositorySearch{

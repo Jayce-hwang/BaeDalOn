@@ -15,17 +15,36 @@ spring:
   mvc:
     hiddenmethod.filter.enabled: true
 
+baedalon:
+  app:
+    version: 0.0.1
+    host: http://localhost:${server.port}
+    name: 배달온
+
+
 logging:
   level:
     org.hibernate:
       SQL: DEBUG
       type.descriptor.sql.BasicBinder: TRACE
 
-
 # 톰캣 기본 요청 사이즈는 2MB 입니다. 그것보다 큰 요청을 받고 싶은 경우에 이 값을 조정해야 합니다.
 server:
+  port: 8080
   tomcat:
     max-http-form-post-size: 5MB
 
-# 웹 서버 호스트
-app.host: http://localhost:8080
+---
+spring:
+  profiles: local
+  datasource:
+    hikari:
+      jdbc-url: jdbc:h2:mem:testdb;
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+
+---
+
+spring:
+  profiles: dev
