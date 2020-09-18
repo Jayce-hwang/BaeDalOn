@@ -1,9 +1,9 @@
 package com.studyveloper.baedalon.builder;
 
-import com.studyveloper.baedalon.shop.ShopStatus;
-import com.studyveloper.baedalon.shop.dto.ShopCreateDTO;
-import com.studyveloper.baedalon.shop.dto.ShopDetails;
-import com.studyveloper.baedalon.shop.dto.ShopEditDTO;
+import com.studyveloper.baedalon.module.shop.domain.ShopStatus;
+import com.studyveloper.baedalon.module.shop.dto.ShopCreateDTO;
+import com.studyveloper.baedalon.module.shop.dto.ShopDetails;
+import com.studyveloper.baedalon.module.shop.dto.ShopEditDTO;
 
 import java.time.LocalDateTime;
 

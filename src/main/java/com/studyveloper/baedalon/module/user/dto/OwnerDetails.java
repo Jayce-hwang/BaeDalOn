@@ -1,0 +1,23 @@
+package com.studyveloper.baedalon.module.user.dto;
+
+import java.time.LocalDateTime;
+
+import com.studyveloper.baedalon.module.user.domain.OwnerStatus;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class OwnerDetails {
+	private String email;
+	private String phone;
+	private String name;
+	private OwnerStatus status;
+	private LocalDateTime createdAt;
+	private LocalDateTime modifiedAt;
+}

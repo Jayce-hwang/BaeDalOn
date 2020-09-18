@@ -1,10 +1,10 @@
 package com.studyveloper.baedalon.builder;
 
-import com.studyveloper.baedalon.group.Group;
-import com.studyveloper.baedalon.item.Item;
-import com.studyveloper.baedalon.item.dto.ItemCreateDto;
-import com.studyveloper.baedalon.item.dto.ItemEditDto;
-import com.studyveloper.baedalon.shop.Shop;
+import com.studyveloper.baedalon.module.group.domain.Group;
+import com.studyveloper.baedalon.module.item.domain.Item;
+import com.studyveloper.baedalon.module.item.dto.ItemCreateDto;
+import com.studyveloper.baedalon.module.item.dto.ItemEditDto;
+import com.studyveloper.baedalon.module.shop.domain.Shop;
 
 import java.util.Random;
 
