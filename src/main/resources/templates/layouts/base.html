@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="base_header(style)">
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <title th:text="${@appProperties.name}">배달온</title>
+
+    <!-- Base Links -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/fontawesome/4.7.0/css/font-awesome.min.css}">
+
+    <style>
+        html, body {
+            height:100%;
+            width:100%;
+        }
+    </style>
+    <!-- Additional links -->
+    <th:block th:replace="${style}"/>
+
+    <!-- Base scripts -->
+    <script th:src="@{/webjars/jquery/3.5.1/dist/jquery.min.js}"></script>
+    <script th:src="@{/webjars/jquery-validation/1.19.2/dist/jquery.validate.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.5.0/dist/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body th:fragment="base_body(main, scripts)" class="bg-light">
+
+<header>
+
+</header>
+
+<main th:replace="${main}">
+
+</main>
+
+<footer>
+
+</footer>
+
+<th:block th:replace="${scripts}"/>
+
+</body>
+</html>
